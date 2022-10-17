@@ -27,7 +27,7 @@ type Mutation {
 type AddUserPayload {
     error: String
     user: User
-  }
+}
 
 type Mutation {
   updateUser(id: String, input: InputUser!): AddUserPayload

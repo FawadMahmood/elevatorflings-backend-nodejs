@@ -1,6 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { Context } from '../../models/context';
-import { IResolvers } from 'graphql-tools';
+import { IResolvers } from '@graphql-tools/utils';
 import * as jwt from 'jsonwebtoken';
 import { BlogsController } from '../../controllers/blogs.controller';
 import { CommentsController } from '../../controllers/comments.controller';
@@ -25,29 +25,29 @@ const resolvers: IResolvers = {
   },
 
   Mutation: {
-    addBlog: (_, inputObject, ctx: Context) => {
-      return blogController.addBlog(inputObject, ctx);
+    addBlog: async (_: any, args: any, ctx: Context) => {
+      return blogController.addBlog(args, ctx);
     },
-    updateBlog: (_, inputObject, ctx: Context) => {
-      return blogController.updateBlog(inputObject, ctx);
+    updateBlog: async (_: any, args: any, ctx: Context) => {
+      return blogController.updateBlog(args, ctx);
     },
-    deleteBlog: (_, inputObject, ctx: Context) => {
-      return blogController.deleteBlog(inputObject, ctx);
+    deleteBlog: async (_: any, args: any, ctx: Context) => {
+      return blogController.deleteBlog(args, ctx);
     },
-    addComment: (_, inputObject, ctx: Context) => {
-      return commentsController.addComment(inputObject, ctx);
+    addComment: async (_: any, args: any, ctx: Context) => {
+      return commentsController.addComment(args, ctx);
     },
-    updateComment: (_, inputObject, ctx: Context) => {
-      return commentsController.updateComment(inputObject, ctx);
+    updateComment: async (_: any, args: any, ctx: Context) => {
+      return commentsController.updateComment(args, ctx);
     },
-    deleteComment: (_, inputObject, ctx: Context) => {
-      return commentsController.deleteComment(inputObject, ctx);
+    deleteComment: async (_: any, args: any, ctx: Context) => {
+      return commentsController.deleteComment(args, ctx);
     },
-    addUser: (_, inputObject, ctx: Context) => {
-      return usersController.addUser(inputObject, ctx);
+    addUser: async (_: any, args: any, ctx: Context) => {
+      return usersController.addUser(args, ctx);
     },
-    updateUser: (_, inputObject, ctx: Context) => {
-      return usersController.updateUser(inputObject, ctx);
+    updateUser: async (_: any, args: any, ctx: Context) => {
+      return usersController.updateUser(args, ctx);
     },
   },
 };

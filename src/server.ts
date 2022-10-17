@@ -1,35 +1,53 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
-import depthLimit from 'graphql-depth-limit';
-import { createServer } from 'http';
-import compression from 'compression';
+import http from 'http';
 import cors from 'cors';
+import { json } from 'body-parser';
 import schema from './graphql/schema';
 import { MongoHelper } from './helpers/mongoHelpers';
+import compression from 'compression';
+import depthLimit from 'graphql-depth-limit';
 
-const app = express();
-const mHelper = new MongoHelper();
-mHelper.initiateMongoConnection();
 
-const server = new ApolloServer({
-  schema,
-  validationRules: [depthLimit(7)],
-  introspection: true,
-  playground: true,
-  context: async ({ req }) => {
-    return await mHelper.validateUser(req);
-  },
-});
+interface MyContext {
+  token?: String;
+}
 
-app.use('*', cors());
-app.use(compression());
-server.applyMiddleware({ app, path: '/graphql' });
+async function startApolloServer() {
+  const mHelper = new MongoHelper();
+  mHelper.initiateMongoConnection();
+  const app = express();
+  const httpServer = http.createServer(app);
+  const server = new ApolloServer<MyContext>({
+    schema,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    validationRules: [depthLimit(7)],
+    introspection: true,
+  });
 
-const httpServer = createServer(app);
 
-httpServer.listen({ port: process.env.PORT }, (): void =>
-  console.log(`\n🚀 GraphQL is now running on http://localhost:${process.env.PORT}/graphql`)
-);
+  await server.start();
+  app.use('/graphql',
+    cors<cors.CorsRequest>(),
+    compression(),
+    json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => {
+        return await mHelper.validateUser(req);
+      },
+    }),
+  );
+
+
+  httpServer.listen({ port: process.env.PORT }, (): void =>
+    console.log(`\n🚀 GraphQL is now running on http://localhost:${process.env.PORT}/graphql`)
+  );
+}
+
+
+startApolloServer();
