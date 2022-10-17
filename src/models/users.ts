@@ -1,5 +1,18 @@
 import mongoose = require("mongoose");
 
+
+const pointSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['Point'],
+    required: true
+  },
+  coordinates: {
+    type: [Number],
+    required: true
+  }
+});
+
 const UserSchema = new mongoose.Schema(
   {
     email: {
@@ -20,7 +33,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
     },
     phone: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Phone',
     },
     age: {
       type: Number,
@@ -38,8 +52,7 @@ const UserSchema = new mongoose.Schema(
       unique: true,
     },
     location: {
-      type: "Point",
-      coordinates: [Number, Number]
+      type: pointSchema,
     },
     provider: {
       type: String,

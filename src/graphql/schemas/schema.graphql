@@ -19,11 +19,22 @@ type Blog {
   images: [String]
 }
 
+type Location{ 
+  coordinates:[Int]
+}
+
 type User {
   email: String
+  username: String
   name: String
-  provider: String
   photoUrl: String
+  phone: String
+  age: Int
+  facebookId: String
+  googleId: String
+  appleId: String
+  location: Location
+  provider: String
 }
 
 type Query {
@@ -95,4 +106,13 @@ input InputUser {
   name: String
   provider: String
   photoUrl: String
+  username: String
+  phone:String
+  age:Int
+  location:ILocation
+}
+
+
+input ILocation{ 
+  coordinates:[Int]
 }
