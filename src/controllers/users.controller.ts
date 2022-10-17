@@ -22,7 +22,7 @@ export class UsersController {
         }
       });
 
-      return { ...userInfo._doc, phone: _phone.phone };
+      return { user: { ...userInfo._doc, phone: _phone.phone }, error: null };
     } catch (error) {
       return new ApolloError('User with same email already exist.', errors.EMAIL_ALREADY_EXISTS);
     }

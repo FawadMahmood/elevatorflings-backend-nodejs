@@ -21,7 +21,7 @@ type User {
 }
 
 type Mutation {
-  addUser(input: InputUser!): User
+  addUser(input: InputUser!): AddUserPayload
 }
 
 type AddUserPayload {
