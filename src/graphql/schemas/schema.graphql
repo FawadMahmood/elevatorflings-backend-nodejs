@@ -1,3 +1,70 @@
+
+
+
+
+type Location{ 
+  coordinates:[Float]
+}
+
+type User {
+  email: String
+  username: String
+  name: String
+  photoUrl: String
+  phone: String
+  age: Int
+  facebookId: String
+  googleId: String
+  appleId: String
+  location: Location
+  provider: String
+}
+
+type Mutation {
+  addUser(input: InputUser!): User
+}
+
+type AddUserPayload {
+    error: String
+    user: User
+  }
+
+type Mutation {
+  updateUser(id: String, input: InputUser!): AddUserPayload
+}
+
+
+
+input InputUser {
+  email: String
+  name: String
+  provider: String
+  photoUrl: String
+  username: String
+  phone:String
+  age:Int
+  location:ILocation
+}
+
+
+input ILocation{ 
+  type:String
+  coordinates:[Float]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 type Comment {
   comment: String
   createdAt: String
@@ -19,23 +86,7 @@ type Blog {
   images: [String]
 }
 
-type Location{ 
-  coordinates:[Int]
-}
 
-type User {
-  email: String
-  username: String
-  name: String
-  photoUrl: String
-  phone: String
-  age: Int
-  facebookId: String
-  googleId: String
-  appleId: String
-  location: Location
-  provider: String
-}
 
 type Query {
   blogs: [Blog]
@@ -73,13 +124,7 @@ type Query {
   token(email: String!): String!
 }
 
-type Mutation {
-  addUser(input: InputUser!): User
-}
 
-type Mutation {
-  updateUser(id: String, input: InputUser!): User
-}
 
 input InputBlog {
   title: String
@@ -101,18 +146,3 @@ input InputComment {
   user: InputUser
 }
 
-input InputUser {
-  email: String
-  name: String
-  provider: String
-  photoUrl: String
-  username: String
-  phone:String
-  age:Int
-  location:ILocation
-}
-
-
-input ILocation{ 
-  coordinates:[Int]
-}
