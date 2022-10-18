@@ -60,7 +60,6 @@ export class UsersController {
   }
 
   async authenticateUser(args: any, ctx: Context) {
-    console.log("authenticateUser", args);
     let user = await Users.findOne({
       $or: [{ email: args.email }, { username: args.email }],
     }).populate({
@@ -74,7 +73,6 @@ export class UsersController {
         // @ts-ignore
         return { user: { ...authenticate._doc, accessToken: user.generateToken() } };
       } else {
-        console.log("information we have is false", authenticate);
         return {
           error: {
             message: "Invalid Credentials.",
@@ -86,7 +84,7 @@ export class UsersController {
     } else {
       return {
         error: {
-          message: "Invalid Credentials.",
+          message: "Oops! we are unable to assosiate any account with this Email/Username.",
           code: errors.INVALID_CREDENTIALS
         },
         user: null,

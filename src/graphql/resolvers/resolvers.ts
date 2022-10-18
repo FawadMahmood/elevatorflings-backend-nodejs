@@ -19,9 +19,7 @@ const resolvers: IResolvers = {
       return blogController.getBlogs(args, ctx);
     },
     signin: (_, args: any, ctx: Context) => {
-      console.log("signin request", args);
       return usersController.authenticateUser(args, ctx);
-      // return jwt.sign({ data: args[AppConstants.EMAIL] }, <string>process.env.auth_encryption_salt);
     },
   },
 
