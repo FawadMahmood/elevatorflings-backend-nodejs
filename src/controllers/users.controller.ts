@@ -2,14 +2,48 @@ import { ApolloError } from 'apollo-server-express';
 import { Model } from 'mongoose';
 import { errors } from '../errors';
 import { Context } from '../models/context';
+import Joi from 'Joi'
+
 
 const Users: Model<any> = require('../models/users');
 const Phone: Model<any> = require('../models/phone');
 
+
+const locationValidation = Joi.object({
+  type: Joi.string().valid('Point'),
+  coordinates: Joi.array(),
+});
+
+const addUserValidationScheema = Joi.object({
+  email: Joi.string().email().required(),
+  username: Joi.string().min(3).required(),
+  name: Joi.string().min(3).required(),
+  provider: Joi.string().valid('self', 'facebook', 'google', 'apple').required(),
+  location: locationValidation,
+  phone: Joi.string().required(),
+});
+
 export class UsersController {
   async addUser(inputObject: any, ctx: Context) {
     try {
+
+
+      const validate = addUserValidationScheema.validate(inputObject.input);
+
+      if (validate.error) {
+        return {
+          error: {
+            message: validate.error.message,
+            code: errors.MISSING_FIELDS
+          },
+          user: null,
+        }
+      }
+
+
       const { phone, ...input } = inputObject.input;
+
+
       const userInfo = await Users.create(input);
       const _phone = await Phone.create({
         phone: phone,
@@ -24,7 +58,13 @@ export class UsersController {
 
       return { user: { ...userInfo._doc, phone: _phone.phone }, error: null };
     } catch (error) {
-      return new ApolloError('User with same email already exist.', errors.EMAIL_ALREADY_EXISTS);
+      return {
+        error: {
+          message: "User with same email already exist.",
+          code: errors.EMAIL_ALREADY_EXISTS
+        },
+        user: null,
+      } //new ApolloError('User with same email already exist.', errors.EMAIL_ALREADY_EXISTS);
     }
   }
 

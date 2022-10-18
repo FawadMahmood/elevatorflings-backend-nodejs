@@ -12,6 +12,8 @@ import schema from './graphql/schema';
 import { MongoHelper } from './helpers/mongoHelpers';
 import compression from 'compression';
 import depthLimit from 'graphql-depth-limit';
+import { errors } from './errors';
+const { createApolloQueryValidationPlugin, constraintDirectiveTypeDefs } = require('graphql-constraint-directive')
 
 
 interface MyContext {
@@ -28,6 +30,14 @@ async function startApolloServer() {
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     validationRules: [depthLimit(7)],
     introspection: true,
+    formatError(formattedError, error) {
+      return {
+        message: formattedError.message,
+        extensions: {
+          code: formattedError.extensions?.code
+        }
+      }
+    },
   });
 
 

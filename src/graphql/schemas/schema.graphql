@@ -1,39 +1,38 @@
-
-
-
-
 type Location{ 
   coordinates:[Float]
 }
 
 type User {
-  email: String
-  username: String
-  name: String
+  email: String!
+  username: String!
+  name: String!
   photoUrl: String
-  phone: String
-  age: Int
+  phone: String!
+  age: Int!
   facebookId: String
   googleId: String
   appleId: String
   location: Location
-  provider: String
+  provider: String,
 }
 
 type Mutation {
   addUser(input: InputUser!): AddUserPayload
 }
 
+type Error{
+  message:String,
+  code:String,
+}
+
 type AddUserPayload {
-    error: String
+    error: Error
     user: User
 }
 
 type Mutation {
   updateUser(id: String, input: InputUser!): AddUserPayload
 }
-
-
 
 input InputUser {
   email: String
@@ -46,11 +45,12 @@ input InputUser {
   location:ILocation
 }
 
-
 input ILocation{ 
   type:String
   coordinates:[Float]
 }
+
+
 
 
 
