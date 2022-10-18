@@ -7,6 +7,7 @@
 
 **Register User***
 
+```
 mutation {
   addUser(
     input: {
@@ -33,5 +34,5 @@ mutation {
     }
   }
 }
-
+```
 
