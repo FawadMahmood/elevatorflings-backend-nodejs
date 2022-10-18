@@ -55,8 +55,8 @@ export class UsersController {
           phone: _phone._id,
         }
       });
-
-      return { user: { ...userInfo._doc, phone: _phone.phone }, error: null };
+      //  phone: _phone.phone
+      return { user: { ...userInfo._doc }, error: null };
     } catch (error) {
       return {
         error: {

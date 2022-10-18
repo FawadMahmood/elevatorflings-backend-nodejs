@@ -3,11 +3,12 @@ type Location{
 }
 
 type User {
+  _id:ID!
   email: String!
   username: String!
   name: String!
   photoUrl: String
-  phone: String!
+  phone: Phone
   age: Int!
   facebookId: String
   googleId: String
@@ -15,6 +16,12 @@ type User {
   location: Location
   provider: String,
   password: String
+}
+
+type Phone{
+  _id:ID!
+  primary:Boolean
+  phone:String!
 }
 
 type Mutation {
