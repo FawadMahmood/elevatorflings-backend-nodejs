@@ -27,8 +27,6 @@ const addUserValidationScheema = Joi.object({
 
 export class UsersController {
   async addUser(inputObject: any, ctx: Context) {
-    console.log("add User Called", inputObject, ctx);
-
     try {
       const validate = addUserValidationScheema.validate(inputObject.input);
       if (validate.error) {
@@ -53,7 +51,7 @@ export class UsersController {
           code: errors.EMAIL_ALREADY_EXISTS
         },
         user: null,
-      } //new ApolloError('User with same email already exist.', errors.EMAIL_ALREADY_EXISTS);
+      }
     }
   }
 
