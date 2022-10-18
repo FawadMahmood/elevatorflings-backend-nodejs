@@ -1,10 +1,9 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { Context } from '../../models/context';
 import { IResolvers } from '@graphql-tools/utils';
-import * as jwt from 'jsonwebtoken';
 import { BlogsController } from '../../controllers/blogs.controller';
 import { CommentsController } from '../../controllers/comments.controller';
-import { AppConstants } from '../../constants/app.constants';
+// import { AppConstants } from '../../constants/app.constants';
 import { UsersController } from '../../controllers/users.controller';
 
 const blogController = new BlogsController();
@@ -19,8 +18,10 @@ const resolvers: IResolvers = {
     blogs: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return blogController.getBlogs(args, ctx);
     },
-    token: (_, args: any) => {
-      return jwt.sign({ data: args[AppConstants.EMAIL] }, <string>process.env.auth_encryption_salt);
+    signin: (_, args: any, ctx: Context) => {
+      console.log("signin request", args);
+      return usersController.authenticateUser(args, ctx);
+      // return jwt.sign({ data: args[AppConstants.EMAIL] }, <string>process.env.auth_encryption_salt);
     },
   },
 

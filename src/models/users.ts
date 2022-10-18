@@ -1,6 +1,9 @@
+const dotenv = require('dotenv');
+dotenv.config();
 import mongoose = require("mongoose");
 import bcrypt from 'bcrypt';
 const saltRounds = 10;
+import * as jwt from 'jsonwebtoken';
 
 
 const pointSchema = new mongoose.Schema({
@@ -72,6 +75,21 @@ const UserSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+UserSchema.methods = {
+  async authenticate(password) {
+    const valid = await bcrypt // @ts-ignore
+      .compare(password, this.password);
+    return (valid ? this : false);
+  },
+
+  generateToken() {
+    // @ts-ignore
+    return jwt.sign({ email: this.email, _id: this._id }, process.env.JWT_SECRET, {
+      expiresIn: "24h", // expires in 24 hours
+    });
+  },
+}
 
 UserSchema.pre('save', function (next) {
   if (!this.isModified('password')) {

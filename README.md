@@ -43,3 +43,31 @@ mutation {
 
 ```
 
+**Authenticate User**
+
+```
+query Signin($email: String!, $password: String!) {
+  signin(email: $email, password: $password) {
+    user {
+      _id
+      name
+      email
+      username
+      phone{
+        phone
+        primary
+      }
+      location {
+        coordinates
+      } 
+      accessToken
+    }
+     error{
+      message,
+      code
+    }
+    }
+  }
+}
+```
+

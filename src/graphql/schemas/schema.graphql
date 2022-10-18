@@ -16,6 +16,7 @@ type User {
   location: Location
   provider: String,
   password: String
+  accessToken:String
 }
 
 type Phone{
@@ -95,8 +96,6 @@ type Blog {
   images: [String]
 }
 
-
-
 type Query {
   blogs: [Blog]
 }
@@ -130,7 +129,7 @@ type Mutation {
 }
 
 type Query {
-  token(email: String!): String!
+  signin(email: String! password:String!): AddUserPayload
 }
 
 type Query{

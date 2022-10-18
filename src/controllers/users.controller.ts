@@ -1,9 +1,8 @@
 import { ApolloError } from 'apollo-server-express';
-import { Model } from 'mongoose';
+import { Error, Model } from 'mongoose';
 import { errors } from '../errors';
 import { Context } from '../models/context';
 import Joi from 'Joi'
-
 
 const Users: Model<any> = require('../models/users');
 const Phone: Model<any> = require('../models/phone');
@@ -40,7 +39,7 @@ export class UsersController {
       }
       const { phone, ...input } = inputObject.input;
       const userInfo = new Users(input);
-      const _phone = new Phone({ phone: phone, primary: true, user: userInfo._id, });
+      const _phone = new Phone({ phone: phone, primary: true, user: userInfo._id, accessToken: userInfo.generateToken() });
       userInfo.phone = _phone._id;
       const promises = await Promise.all([await userInfo.save(), _phone.save()]).then(() => console.log("adding user success"));
       return { user: { ...userInfo._doc, phone: _phone }, error: null };
@@ -58,5 +57,40 @@ export class UsersController {
   async updateUser(inputObject: any, ctx: Context) {
     const userInfo = await Users.findOneAndUpdate({ _id: inputObject.id }, inputObject.input, { new: true });
     return userInfo;
+  }
+
+  async authenticateUser(args: any, ctx: Context) {
+    console.log("authenticateUser", args);
+    let user = await Users.findOne({
+      $or: [{ email: args.email }, { username: args.email }],
+    }).populate({
+      path: 'phone',
+      model: 'Phone',
+    });
+
+    if (user) {
+      const authenticate = await user.authenticate(args.password);
+      if (authenticate) {
+        // @ts-ignore
+        return { user: { ...authenticate._doc, accessToken: user.generateToken() } };
+      } else {
+        console.log("information we have is false", authenticate);
+        return {
+          error: {
+            message: "Invalid Credentials.",
+            code: errors.INVALID_CREDENTIALS
+          },
+          user: null,
+        }
+      }
+    } else {
+      return {
+        error: {
+          message: "Invalid Credentials.",
+          code: errors.INVALID_CREDENTIALS
+        },
+        user: null,
+      }
+    }
   }
 }
