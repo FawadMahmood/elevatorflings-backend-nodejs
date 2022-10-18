@@ -22,13 +22,12 @@ const addUserValidationScheema = Joi.object({
   provider: Joi.string().valid('self', 'facebook', 'google', 'apple').required(),
   location: locationValidation,
   phone: Joi.string().required(),
+  age: Joi.number().min(18),
 });
 
 export class UsersController {
   async addUser(inputObject: any, ctx: Context) {
     try {
-
-
       const validate = addUserValidationScheema.validate(inputObject.input);
 
       if (validate.error) {
