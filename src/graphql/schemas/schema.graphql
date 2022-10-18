@@ -133,6 +133,10 @@ type Query {
   token(email: String!): String!
 }
 
+type Query{
+  phone(id:ID!):Phone
+}
+
 
 
 input InputBlog {

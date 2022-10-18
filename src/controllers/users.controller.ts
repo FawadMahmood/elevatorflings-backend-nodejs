@@ -27,6 +27,8 @@ const addUserValidationScheema = Joi.object({
 
 export class UsersController {
   async addUser(inputObject: any, ctx: Context) {
+    console.log("add User Called", inputObject, ctx);
+
     try {
       const validate = addUserValidationScheema.validate(inputObject.input);
 
@@ -55,8 +57,7 @@ export class UsersController {
           phone: _phone._id,
         }
       });
-      //  phone: _phone.phone
-      return { user: { ...userInfo._doc }, error: null };
+      return { user: { ...userInfo._doc, phone: _phone }, error: null };
     } catch (error) {
       return {
         error: {

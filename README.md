@@ -21,10 +21,14 @@ mutation {
     }
   ) {
     user {
+      _id
       name
       email
       username
-      phone
+      phone{
+        phone
+        primary
+      }
       location {
         coordinates
       }
@@ -35,7 +39,6 @@ mutation {
     }
   }
 }
-
 
 
 ```
