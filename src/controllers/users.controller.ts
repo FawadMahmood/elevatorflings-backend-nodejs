@@ -31,7 +31,6 @@ export class UsersController {
 
     try {
       const validate = addUserValidationScheema.validate(inputObject.input);
-
       if (validate.error) {
         return {
           error: {
@@ -41,22 +40,11 @@ export class UsersController {
           user: null,
         }
       }
-
-
       const { phone, ...input } = inputObject.input;
-
-
-      const userInfo = await Users.create(input);
-      const _phone = await Phone.create({
-        phone: phone,
-        primary: true,
-        user: userInfo._id,
-      });
-      await Users.updateOne({ _id: userInfo._id }, {
-        $set: {
-          phone: _phone._id,
-        }
-      });
+      const userInfo = new Users(input);
+      const _phone = new Phone({ phone: phone, primary: true, user: userInfo._id, });
+      userInfo.phone = _phone._id;
+      const promises = await Promise.all([await userInfo.save(), _phone.save()]).then(() => console.log("adding user success"));
       return { user: { ...userInfo._doc, phone: _phone }, error: null };
     } catch (error) {
       return {

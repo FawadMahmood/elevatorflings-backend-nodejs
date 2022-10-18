@@ -1,5 +1,7 @@
 import mongoose = require("mongoose");
 import bcrypt from 'bcrypt';
+const saltRounds = 10;
+
 
 const pointSchema = new mongoose.Schema({
   type: {
@@ -75,7 +77,7 @@ UserSchema.pre('save', function (next) {
   if (!this.isModified('password')) {
     return next();
   }
-  bcrypt.genSalt((err, salt) => {
+  bcrypt.genSalt(saltRounds, (err, salt) => {
     if (err) {
       return next(err);
     }
