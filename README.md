@@ -5,7 +5,7 @@
 
 #Mutations
 
-**Register User***
+**Register User**
 
 ```
 mutation {
