@@ -17,6 +17,7 @@ mutation {
       provider: "self"
       location: { type: "Point", coordinates: [10.245, 2.366] }
       phone: "923060023003"
+      password:"qwertyuiop"
     }
   ) {
     user {

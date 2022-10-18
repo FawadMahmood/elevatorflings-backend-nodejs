@@ -17,6 +17,7 @@ const locationValidation = Joi.object({
 const addUserValidationScheema = Joi.object({
   email: Joi.string().email().required(),
   username: Joi.string().min(3).required(),
+  password: Joi.string().min(8).required(),
   name: Joi.string().min(3).required(),
   provider: Joi.string().valid('self', 'facebook', 'google', 'apple').required(),
   location: locationValidation,

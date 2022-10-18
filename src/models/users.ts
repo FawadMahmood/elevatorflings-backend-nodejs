@@ -1,5 +1,5 @@
 import mongoose = require("mongoose");
-
+import bcrypt from 'bcrypt';
 
 const pointSchema = new mongoose.Schema({
   type: {
@@ -58,12 +58,37 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    password: {
+      type: String,
+      required: true,
+    },
+    lastLogin: {
+      type: Date
+    }
   },
   {
     timestamps: true,
   }
 );
 
-
+UserSchema.pre('save', function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+  bcrypt.genSalt((err, salt) => {
+    if (err) {
+      return next(err);
+    }
+    // @ts-ignore
+    bcrypt.hash(this.password, salt, (err, hash) => {
+      if (err) {
+        return next(err);
+      }
+      // @ts-ignore
+      this.password = hash;
+      next();
+    });
+  });
+});
 
 module.exports = mongoose.model('User', UserSchema);
