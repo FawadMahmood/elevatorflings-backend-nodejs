@@ -6,7 +6,7 @@ import Joi from 'Joi'
 // @ts-ignore
 import otpGenerator from 'otp-generator'
 // var otpGenerator = require("otp-generator");
-
+import { VerifyAuthorization } from '../decorators/auth.decorator';
 
 const Users: Model<any> = require('../models/users');
 const Phone: Model<any> = require('../models/phone');
@@ -63,50 +63,50 @@ export class UsersController {
     return userInfo;
   }
 
+  hasNumber(myString: string) {
+    return /\d/.test(myString);
+  }
+
   async requestOtp(inputObject: any, ctx: Context) {
-    const phone = await Phone.findOne({ phone: inputObject.email });
-
+    const phone = this.hasNumber(inputObject.email) ? await Phone.findOne({ phone: inputObject.email }) : false;
+    let user;
     if (phone) {
-      console.log("oh its a phone number?");
-
+      user = await Users.findOne({ _id: phone.user });
     } else {
-      let user = await Users.findOne({
+      user = await Users.findOne({
         $or: [{ email: inputObject.email }, { username: inputObject.email }],
       });
-
-      if (user) {
-        let otp_generate = otpGenerator.generate(6, {
-          lowerCaseAlphabets: false,
-          upperCaseAlphabets: false,
-          specialChars: false,
-          digits: true,
-        });
-
-        user.otp = otp_generate;
-        user.otpTime = new Date();
-        user.save();
-
-        const message = `${otp_generate} is your One Time Password (OTP) for logging into account.`;
-
-        return {
-          otpResponse: {
-            message: message,
-            code: errors.OTP_SENT_PHONE
-          }
-        }
-      } else {
-        return {
-          error: {
-            message: "Oops! we are unable to assosiate any account with this Email/Username/Phone.",
-            code: errors.INVALID_CREDENTIALS
-          },
-          user: null,
-        }
-      }
-
-
     }
 
+    if (user) {
+      let otp_generate = otpGenerator.generate(6, {
+        lowerCaseAlphabets: false,
+        upperCaseAlphabets: false,
+        specialChars: false,
+        digits: true,
+      });
+
+      user.otp = otp_generate;
+      user.otpTime = new Date();
+      user.save();
+
+      const message = `${otp_generate} is your One Time Password (OTP) for logging into account.`;
+
+      return {
+        otpResponse: {
+          message: message,
+          code: errors.OTP_SENT_PHONE
+        }
+      }
+    } else {
+      return {
+        error: {
+          message: "Oops! we are unable to assosiate any account with this Email/Username/Phone.",
+          code: errors.INVALID_CREDENTIALS
+        },
+        user: null,
+      }
+    }
   }
 
   async authenticateUser(args: any, ctx: Context) {
