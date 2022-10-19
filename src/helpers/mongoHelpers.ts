@@ -14,8 +14,7 @@ export class MongoHelper {
         const payload = <{ email: string, iat: number, _id: string, }>(
           jwt.verify(token, <string>process.env.JWT_SECRET)
         );
-        // console.log("token payload", payload);
-        const id = payload._id; //payload['data'];
+        const id = payload._id;
         return await User.findById(id).then((response: any) => {
           if (response) {
             return { isUserLogged: true, _id: response._id, email: response.email };

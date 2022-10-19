@@ -69,6 +69,8 @@ export class UsersController {
 
   @VerifyAuthorization
   resetPassword(inputObject: any, ctx: Context) {
+    console.log("yes can reset password", inputObject, ctx);
+
     return {
 
     } as any;
