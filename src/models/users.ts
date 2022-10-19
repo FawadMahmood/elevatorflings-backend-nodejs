@@ -101,6 +101,9 @@ UserSchema.pre('save', function (next) {
   if (!this.isModified('password')) {
     return next();
   }
+
+  console.log("seens like password is modified");
+
   bcrypt.genSalt(saltRounds, (err, salt) => {
     if (err) {
       return next(err);
@@ -115,6 +118,8 @@ UserSchema.pre('save', function (next) {
       next();
     });
   });
+
+
 });
 
 module.exports = mongoose.model('User', UserSchema);

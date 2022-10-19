@@ -79,7 +79,7 @@ input InputResetPassword{
 }
 
 type Mutation {
-  resetPassword(input:InputResetPassword): AddUserPayload
+  resetPassword(input:InputResetPassword!): AddUserPayload
 }
 
 input InputUser {
@@ -98,20 +98,6 @@ input ILocation{
   type:String
   coordinates:[Float]
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 type Comment {

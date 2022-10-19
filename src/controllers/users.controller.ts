@@ -25,7 +25,7 @@ const addUserValidationScheema = Joi.object({
   provider: Joi.string().valid('self', 'facebook', 'google', 'apple').required(),
   location: locationValidation,
   phone: Joi.string().required(),
-  age: Joi.number().min(18),
+  age: Joi.number().min(18).required(),
 });
 
 export class UsersController {
@@ -68,12 +68,23 @@ export class UsersController {
   }
 
   @VerifyAuthorization
-  resetPassword(inputObject: any, ctx: Context) {
-    console.log("yes can reset password", inputObject, ctx);
-
-    return {
-
-    } as any;
+  async resetPassword(inputObject: any, ctx: Context) {
+    const input = inputObject.input;
+    let user = await Users.findById(ctx._id);
+    if (input.password === input.confirm_password) {
+      user.password = input.password;
+      await user.save();
+      user.populate('phone', 'phone primary');
+      return { user: { ...user._doc, accessToken: user.generateToken() } } as any;
+    } else {
+      return {
+        error: {
+          message: "Oops! password and confirm password does not match.",
+          code: errors.PASSWORD_MISMATCH
+        },
+        user: null,
+      } as any
+    }
   }
 
   async verifyOtp(inputObject: any, ctx: Context) {
