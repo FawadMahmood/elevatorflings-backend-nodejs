@@ -34,6 +34,21 @@ type Error{
   code:String,
 }
 
+
+type OtpPayloadResponse {
+    error: Error
+    otpResponse: Response
+}
+
+type Response{
+  message:String,
+  code:String,
+}
+
+type Mutation {
+  requestOtp(email:String!): OtpPayloadResponse
+}
+
 type AddUserPayload {
     error: Error
     user: User
@@ -103,6 +118,7 @@ type Query {
 type Query {
   blog(url: String!): Blog
 }
+
 
 type Mutation {
   addBlog(input: InputBlog!): Blog

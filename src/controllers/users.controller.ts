@@ -3,6 +3,10 @@ import { Error, Model } from 'mongoose';
 import { errors } from '../errors';
 import { Context } from '../models/context';
 import Joi from 'Joi'
+// @ts-ignore
+import otpGenerator from 'otp-generator'
+// var otpGenerator = require("otp-generator");
+
 
 const Users: Model<any> = require('../models/users');
 const Phone: Model<any> = require('../models/phone');
@@ -59,13 +63,56 @@ export class UsersController {
     return userInfo;
   }
 
+  async requestOtp(inputObject: any, ctx: Context) {
+    const phone = await Phone.findOne({ phone: inputObject.email });
+
+    if (phone) {
+      console.log("oh its a phone number?");
+
+    } else {
+      let user = await Users.findOne({
+        $or: [{ email: inputObject.email }, { username: inputObject.email }],
+      });
+
+      if (user) {
+        let otp_generate = otpGenerator.generate(6, {
+          lowerCaseAlphabets: false,
+          upperCaseAlphabets: false,
+          specialChars: false,
+          digits: true,
+        });
+
+        user.otp = otp_generate;
+        user.otpTime = new Date();
+        user.save();
+
+        const message = `${otp_generate} is your One Time Password (OTP) for logging into account.`;
+
+        return {
+          otpResponse: {
+            message: message,
+            code: errors.OTP_SENT_PHONE
+          }
+        }
+      } else {
+        return {
+          error: {
+            message: "Oops! we are unable to assosiate any account with this Email/Username/Phone.",
+            code: errors.INVALID_CREDENTIALS
+          },
+          user: null,
+        }
+      }
+
+
+    }
+
+  }
+
   async authenticateUser(args: any, ctx: Context) {
     let user = await Users.findOne({
       $or: [{ email: args.email }, { username: args.email }],
-    }).populate({
-      path: 'phone',
-      model: 'Phone',
-    });
+    }).populate('phone', 'phone primary');
 
     if (user) {
       const authenticate = await user.authenticate(args.password);

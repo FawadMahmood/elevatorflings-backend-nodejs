@@ -3031,6 +3031,11 @@ optional-require@^1.1.8:
   dependencies:
     require-at "^1.0.6"
 
+otp-generator@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/otp-generator/-/otp-generator-4.0.0.tgz#9f93e1de4b9daf6be501467148f530443ef6828f"
+  integrity sha512-P0nG+RVCRDkZdEjXgoMeOTVF3jwMShAk8qYYNx+VNdWgxhcLbZQjdx3GfzgRTZENTx+9I14XfTDJZjKQJdBcVw==
+
 p-finally@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-finally/-/p-finally-1.0.0.tgz#3fbcfb15b899a44123b34b6dcc18b724336a2cae"

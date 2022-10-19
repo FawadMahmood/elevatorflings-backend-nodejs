@@ -71,3 +71,19 @@ query Signin($email: String!, $password: String!) {
 }
 ```
 
+**Request OTP**
+
+```
+mutation RequestOtp($email: String!) {
+  requestOtp(email: $email) {
+    otpResponse{
+      message,
+      code
+    }
+    error{
+       message,
+       code
+    }
+  }
+}
+```

@@ -48,6 +48,9 @@ const resolvers: IResolvers = {
     updateUser: async (_: any, args: any, ctx: Context) => {
       return usersController.updateUser(args, ctx);
     },
+    requestOtp: async (_: any, args: any, ctx: Context) => {
+      return usersController.requestOtp(args, ctx);
+    },
   },
 };
 

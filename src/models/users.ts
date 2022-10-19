@@ -69,7 +69,13 @@ const UserSchema = new mongoose.Schema(
     },
     lastLogin: {
       type: Date
-    }
+    },
+    otp: {
+      type: Number,
+    },
+    otpTime: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
