@@ -102,8 +102,6 @@ UserSchema.pre('save', function (next) {
     return next();
   }
 
-  console.log("seens like password is modified");
-
   bcrypt.genSalt(saltRounds, (err, salt) => {
     if (err) {
       return next(err);
