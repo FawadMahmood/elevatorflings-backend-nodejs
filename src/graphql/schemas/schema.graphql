@@ -17,6 +17,13 @@ type User {
   provider: String,
   password: String
   accessToken:String
+  gender:Gender
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  NONE
 }
 
 type Phone{
@@ -92,6 +99,7 @@ input InputUser {
   age:Int
   location:ILocation
   password: String
+  gender:String
 }
 
 input ILocation{ 

@@ -37,6 +37,9 @@ const UserSchema = new mongoose.Schema(
     photoUrl: {
       type: String,
     },
+    gender: {
+      type: String,
+    },
     phone: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Phone',
@@ -76,6 +79,7 @@ const UserSchema = new mongoose.Schema(
     otpTime: {
       type: Date,
     },
+    interests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' }]
   },
   {
     timestamps: true,
