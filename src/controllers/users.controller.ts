@@ -7,6 +7,7 @@ import Joi from 'Joi'
 import otpGenerator from 'otp-generator'
 // var otpGenerator = require("otp-generator");
 import { VerifyAuthorization } from '../decorators/auth.decorator';
+import { ValidateUserInput } from '../decorators/validation.decorator';
 
 const Users: Model<any> = require('../models/users');
 const Phone: Model<any> = require('../models/phone');
@@ -68,6 +69,7 @@ export class UsersController {
   }
 
   @VerifyAuthorization
+  @ValidateUserInput
   async resetPassword(inputObject: any, ctx: Context) {
     const input = inputObject.input;
     let user = await Users.findById(ctx._id);

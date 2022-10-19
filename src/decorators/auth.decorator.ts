@@ -1,5 +1,4 @@
 import { ApolloError } from 'apollo-server-express';
-import { GraphQLError } from 'graphql';
 import { AppConstants } from '../constants/app.constants';
 import { ErrorConstants } from '../constants/errors.constants';
 
