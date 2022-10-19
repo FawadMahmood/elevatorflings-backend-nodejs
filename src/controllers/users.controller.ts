@@ -5,49 +5,22 @@ import { Context } from '../models/context';
 import Joi from 'Joi'
 // @ts-ignore
 import otpGenerator from 'otp-generator'
-// var otpGenerator = require("otp-generator");
 import { VerifyAuthorization } from '../decorators/auth.decorator';
 import { ValidateUserInput } from '../decorators/validation.decorator';
 
 const Users: Model<any> = require('../models/users');
 const Phone: Model<any> = require('../models/phone');
 
-
-const locationValidation = Joi.object({
-  type: Joi.string().valid('Point'),
-  coordinates: Joi.array(),
-});
-
-const addUserValidationScheema = Joi.object({
-  email: Joi.string().email().required(),
-  username: Joi.string().min(3).required(),
-  password: Joi.string().min(8).required(),
-  name: Joi.string().min(3).required(),
-  provider: Joi.string().valid('self', 'facebook', 'google', 'apple').required(),
-  location: locationValidation,
-  phone: Joi.string().required(),
-  age: Joi.number().min(18).required(),
-});
-
 export class UsersController {
+  @ValidateUserInput
   async addUser(inputObject: any, ctx: Context) {
     try {
-      const validate = addUserValidationScheema.validate(inputObject.input);
-      if (validate.error) {
-        return {
-          error: {
-            message: validate.error.message,
-            code: errors.MISSING_FIELDS
-          },
-          user: null,
-        }
-      }
       const { phone, ...input } = inputObject.input;
       const userInfo = new Users(input);
       const _phone = new Phone({ phone: phone, primary: true, user: userInfo._id, accessToken: userInfo.generateToken() });
       userInfo.phone = _phone._id;
       const promises = await Promise.all([await userInfo.save(), _phone.save()]).then(() => console.log("adding user success"));
-      return { user: { ...userInfo._doc, phone: _phone }, error: null };
+      return { user: { ...userInfo._doc, phone: _phone }, error: null } as any;
     } catch (error) {
       return {
         error: {
@@ -55,7 +28,7 @@ export class UsersController {
           code: errors.EMAIL_ALREADY_EXISTS
         },
         user: null,
-      }
+      } as any;
     }
   }
 
