@@ -23,7 +23,6 @@ export class MongoHelper {
           return { isUserLogged: false };
         });
       } catch (error) {
-        console.log("token payload error", error);
         return { isUserLogged: false };
       }
     } else {

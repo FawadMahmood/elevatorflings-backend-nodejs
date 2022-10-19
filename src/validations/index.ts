@@ -17,6 +17,13 @@ const addUserValidationScheema = Joi.object({
 });
 
 
+const resetPassword = Joi.object({
+    password: Joi.string().min(8).required(),
+    confirm_password: Joi.string().required().valid(Joi.ref('password')),
+})
+
+
 export const validations = {
-    "addUser": addUserValidationScheema as Joi.ObjectSchema<any>
+    "addUser": addUserValidationScheema as Joi.ObjectSchema<any>,
+    "resetPassword": resetPassword as Joi.ObjectSchema<any>,
 }

@@ -17,7 +17,13 @@ export function ValidateUserInput(_target: any,
             const input = args[0].input ? args[0].input : args[0];
             const validate = scheema.validate(input);
             if (validate.error) {
-                throw new ApolloError(validate.error.message, ErrorConstants.INCORRECT_INPUT);
+                return {
+                    error: {
+                        message: validate.error.message,
+                        code: ErrorConstants.INCORRECT_INPUT
+                    },
+                } as any
+                // throw new ApolloError(validate.error.message, ErrorConstants.INCORRECT_INPUT);
             } else {
                 return await fn.apply(this, args);
             }
