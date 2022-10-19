@@ -51,6 +51,12 @@ const resolvers: IResolvers = {
     requestOtp: async (_: any, args: any, ctx: Context) => {
       return usersController.requestOtp(args, ctx);
     },
+    verifyOtp: async (_: any, args: any, ctx: Context) => {
+      return usersController.verifyOtp(args, ctx);
+    },
+    resetPassword: async (_: any, args: any, ctx: Context) => {
+      return usersController.resetPassword(args, ctx);
+    },
   },
 };
 

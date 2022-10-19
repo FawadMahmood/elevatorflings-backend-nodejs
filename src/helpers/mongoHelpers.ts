@@ -1,4 +1,4 @@
-const User = require('../models/users');
+const User: mongoose.Model<any> = require('../models/users');
 import mongoose = require('mongoose');
 import * as jwt from 'jsonwebtoken';
 import { Config } from '../config';
@@ -9,20 +9,29 @@ export class MongoHelper {
    */
   public async validateUser(req: any) {
     const token = req.headers.authorization || '';
-    try {
-      const payload = <{ data: string; iat: number }>(
-        jwt.verify(token, <string>process.env.auth_encryption_salt)
-      );
-      const email = payload['data'];
-      return await User.find({ email: email }).then((response: any) => {
-        if (response.length > 0) {
-          return { isUserLogged: true, email: email };
-        }
+    if (token) {
+      try {
+        const payload = <{ email: string, iat: number, _id: string, }>(
+          jwt.verify(token, <string>process.env.JWT_SECRET)
+        );
+        // console.log("token payload", payload);
+        const id = payload._id; //payload['data'];
+        return await User.findById(id).then((response: any) => {
+          if (response) {
+            return { isUserLogged: true, _id: response._id, email: response.email };
+          }
+
+          return { isUserLogged: false };
+        });
+      } catch (error) {
+        console.log("token payload error", error);
         return { isUserLogged: false };
-      });
-    } catch (error) {
+      }
+    } else {
       return { isUserLogged: false };
     }
+
+
   }
 
   /**

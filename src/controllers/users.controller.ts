@@ -67,6 +67,57 @@ export class UsersController {
     return /\d/.test(myString);
   }
 
+  @VerifyAuthorization
+  resetPassword(inputObject: any, ctx: Context) {
+    return {
+
+    } as any;
+  }
+
+  async verifyOtp(inputObject: any, ctx: Context) {
+    const user = await Users.findOne({ email: inputObject.email });
+    if (user) {
+      var date: Date = new Date();
+      var date_otp: Date = new Date(user.otpTime);
+      var FIVE_MIN = 15 * 60 * 1000;
+
+      // @ts-ignore
+      if (date - date_otp > FIVE_MIN) {
+        return {
+          error: {
+            message: "Oops! lookslike otp is incorrect or expired.",
+            code: errors.OTP_EXPIRED
+          },
+          user: null,
+        }
+      } else {
+        if (parseInt(inputObject.otp) === parseInt(user.otp)) {
+          return {
+            otpResponse: {
+              accessToken: user.generateToken()
+            }
+          }
+        } else {
+          return {
+            error: {
+              message: "Oops! lookslike otp is incorrect or expired.",
+              code: errors.OTP_EXPIRED
+            },
+            user: null,
+          }
+        }
+      }
+    } else {
+      return {
+        error: {
+          message: "Oops! we are unable to assosiate any account with this Email/Username/Phone.",
+          code: errors.INVALID_CREDENTIALS
+        },
+        user: null,
+      }
+    }
+  }
+
   async requestOtp(inputObject: any, ctx: Context) {
     const phone = this.hasNumber(inputObject.email) ? await Phone.findOne({ phone: inputObject.email }) : false;
     let user;
@@ -90,12 +141,14 @@ export class UsersController {
       user.otpTime = new Date();
       user.save();
 
-      const message = `${otp_generate} is your One Time Password (OTP) for logging into account.`;
+      const message = `${otp_generate} is your One Time Password (OTP) for logging into account. (otp visible for development purposes)`;
 
       return {
         otpResponse: {
           message: message,
-          code: errors.OTP_SENT_PHONE
+          code: errors.OTP_SENT_PHONE,
+          name: user.name,
+          email: user.email
         }
       }
     } else {

@@ -41,12 +41,27 @@ type OtpPayloadResponse {
 }
 
 type Response{
-  message:String,
-  code:String,
+  message:String
+  code:String
+  name:String
+  email:String
+}
+
+type OtpResponse{
+  accessToken:String!
 }
 
 type Mutation {
   requestOtp(email:String!): OtpPayloadResponse
+}
+
+type OtpVerificationPayload {
+    error: Error
+    otpResponse: OtpResponse
+}
+
+type Mutation {
+  verifyOtp(email:String! otp:String!): OtpVerificationPayload
 }
 
 type AddUserPayload {
@@ -56,6 +71,15 @@ type AddUserPayload {
 
 type Mutation {
   updateUser(id: String, input: InputUser!): AddUserPayload
+}
+
+input InputResetPassword{
+  password:String
+  confirm_password:String
+}
+
+type Mutation {
+  resetPassword(input:InputResetPassword): AddUserPayload
 }
 
 input InputUser {
