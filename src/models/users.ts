@@ -79,7 +79,11 @@ const UserSchema = new mongoose.Schema(
     otpTime: {
       type: Date,
     },
-    interests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' }]
+    interests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' }],
+    completed: {
+      type: Boolean,
+      default: false,
+    }
   },
   {
     timestamps: true,

@@ -19,7 +19,7 @@ export class UsersController {
     const _queue: typeof Queue = ctx.queue;
 
     // @ts-ignore
-    _queue.add({ video: 'http://example.com/video1.mov' });
+    // _queue.add({ video: 'http://example.com/video1.mov' });
     // console.log("context has queue? ", _queue);
 
     try {
