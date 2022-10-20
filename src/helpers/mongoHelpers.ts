@@ -28,8 +28,6 @@ export class MongoHelper {
     } else {
       return { isUserLogged: false };
     }
-
-
   }
 
   /**
