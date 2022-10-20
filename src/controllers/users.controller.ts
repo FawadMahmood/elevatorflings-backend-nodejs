@@ -7,6 +7,8 @@ import Joi from 'Joi'
 import otpGenerator from 'otp-generator'
 import { VerifyAuthorization } from '../decorators/auth.decorator';
 import { ValidateUserInput } from '../decorators/validation.decorator';
+import Queue from 'bull';
+
 
 const Users: Model<any> = require('../models/users');
 const Phone: Model<any> = require('../models/phone');
@@ -14,6 +16,12 @@ const Phone: Model<any> = require('../models/phone');
 export class UsersController {
   @ValidateUserInput
   async addUser(inputObject: any, ctx: Context) {
+    const _queue: typeof Queue = ctx.queue;
+
+    // @ts-ignore
+    _queue.add({ video: 'http://example.com/video1.mov' });
+    // console.log("context has queue? ", _queue);
+
     try {
       const { phone, ...input } = inputObject.input;
       const userInfo = new Users(input);
