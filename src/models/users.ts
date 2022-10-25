@@ -83,6 +83,18 @@ const UserSchema = new mongoose.Schema(
     completed: {
       type: Boolean,
       default: false,
+    },
+    initialCompletion: {
+      type: Boolean,
+      default: false,
+    },
+    step: {
+      type: Number,
+      default: 1,
+    },
+    dob: {
+      type: Date,
+      required: true
     }
   },
   {

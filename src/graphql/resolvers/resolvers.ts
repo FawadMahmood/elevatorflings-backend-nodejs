@@ -18,9 +18,9 @@ const resolvers: IResolvers = {
     blogs: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return blogController.getBlogs(args, ctx);
     },
-    signin: (_, args: any, ctx: Context) => {
-      return usersController.authenticateUser(args, ctx);
-    },
+    // signin: (_, args: any, ctx: Context) => {
+    //   return usersController.authenticateUser(args, ctx);
+    // },
   },
 
   Mutation: {
@@ -57,6 +57,11 @@ const resolvers: IResolvers = {
     resetPassword: async (_: any, args: any, ctx: Context) => {
       return usersController.resetPassword(args, ctx);
     },
+    signIn: async (_: any, args: any, ctx: Context) => {
+      // console.log(args, ctx);
+
+      return usersController.authenticateUser(args, ctx);
+    }
   },
 };
 

@@ -13,7 +13,7 @@ const addUserValidationScheema = Joi.object({
     provider: Joi.string().valid('self', 'facebook', 'google', 'apple').required(),
     location: locationValidation,
     phone: Joi.string().required(),
-    age: Joi.number().min(18).required(),
+    dob: Joi.date().required(),
     gender: Joi.string().valid('MALE', 'FEMALE', 'NONE').required(),
 });
 

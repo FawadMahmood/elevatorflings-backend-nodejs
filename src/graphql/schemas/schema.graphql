@@ -1,3 +1,6 @@
+scalar Date
+
+
 type Location{ 
   coordinates:[Float]
 }
@@ -85,6 +88,8 @@ input InputResetPassword{
   confirm_password:String
 }
 
+
+
 type Mutation {
   resetPassword(input:InputResetPassword!): AddUserPayload
 }
@@ -96,7 +101,7 @@ input InputUser {
   photoUrl: String
   username: String
   phone:String
-  age:Int
+  dob:Date!
   location:ILocation
   password: String
   gender:String
@@ -162,8 +167,8 @@ type Mutation {
   deleteComment(id: String): Comment
 }
 
-type Query {
-  signin(email: String! password:String!): AddUserPayload
+type Mutation {
+  signIn(email: String! password:String!): AddUserPayload
 }
 
 type Query{
