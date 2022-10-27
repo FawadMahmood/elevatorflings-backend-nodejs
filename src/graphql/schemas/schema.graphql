@@ -21,6 +21,7 @@ type User {
   password: String
   accessToken:String
   gender:Gender
+  completed:Boolean
 }
 
 enum Gender {
@@ -37,6 +38,20 @@ type Phone{
 
 type Mutation {
   addUser(input: InputUser!): AddUserPayload
+}
+
+input InputLocation {
+  location:ILocation
+}
+
+type GenericPayload {
+    error: Error
+    success: Boolean
+}
+
+
+type Mutation {
+  setLocation(input: InputLocation!): GenericPayload
 }
 
 type Error{

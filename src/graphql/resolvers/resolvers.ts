@@ -58,9 +58,10 @@ const resolvers: IResolvers = {
       return usersController.resetPassword(args, ctx);
     },
     signIn: async (_: any, args: any, ctx: Context) => {
-      // console.log(args, ctx);
-
       return usersController.authenticateUser(args, ctx);
+    },
+    setLocation: async (_: any, args: any, ctx: Context) => {
+      return usersController.setLocation(args, ctx);
     }
   },
 };

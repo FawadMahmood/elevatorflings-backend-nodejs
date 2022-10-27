@@ -16,7 +16,7 @@ const Phone: Model<any> = require('../models/phone');
 export class UsersController {
   @ValidateUserInput
   async addUser(inputObject: any, ctx: Context) {
-    const _queue: typeof Queue = ctx.queue;
+    // const _queue: typeof Queue = ctx.queue;
 
     // @ts-ignore
     // _queue.add({ video: 'http://example.com/video1.mov' });
@@ -25,10 +25,10 @@ export class UsersController {
     try {
       const { phone, ...input } = inputObject.input;
       const userInfo = new Users(input);
-      const _phone = new Phone({ phone: phone, primary: true, user: userInfo._id, accessToken: userInfo.generateToken() });
+      const _phone = new Phone({ phone: phone, primary: true, user: userInfo._id });
       userInfo.phone = _phone._id;
       const promises = await Promise.all([await userInfo.save(), _phone.save()]).then(() => console.log("adding user success"));
-      return { user: { ...userInfo._doc, phone: _phone }, error: null } as any;
+      return { user: { ...userInfo._doc, phone: _phone, accessToken: userInfo.generateToken() }, error: null } as any;
     } catch (error) {
       return {
         error: {
@@ -43,6 +43,38 @@ export class UsersController {
   async updateUser(inputObject: any, ctx: Context) {
     const userInfo = await Users.findOneAndUpdate({ _id: inputObject.id }, inputObject.input, { new: true });
     return userInfo;
+  }
+
+  @VerifyAuthorization
+  async setLocation(inputObject: any, ctx: Context) {
+    const _queue: typeof Queue = ctx.queue;
+    const input = inputObject.input;
+    const userInfo = await Users.findOneAndUpdate({ _id: ctx._id }, {
+      $set: {
+        location: input.location,
+      }
+    });
+
+    if (!userInfo.completed) {
+      Users.findOneAndUpdate({ _id: ctx._id }, {
+        $set: {
+          step: 2,
+        }
+      }).then(response => {
+        console.log("step updated.");
+      });
+
+      // @ts-ignore
+      _queue.add({ _id: ctx._id, new: true });
+    } else {
+      // @ts-ignore
+      _queue.add({ _id: ctx._id, new: false });
+    }
+
+    return {
+      error: null,
+      success: true,
+    } as any
   }
 
   hasNumber(myString: string) {

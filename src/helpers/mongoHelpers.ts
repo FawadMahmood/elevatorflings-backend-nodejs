@@ -11,6 +11,8 @@ feedsQueue.process(function (job, done) {
   // transcode image asynchronously and report progress
   // job.progress(42);
 
+  const data: { _id: string, new: boolean } = job.data;
+
   console.log("queue job ran", job.data);
 
 
