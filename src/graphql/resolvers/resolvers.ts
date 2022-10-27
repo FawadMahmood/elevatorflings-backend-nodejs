@@ -5,10 +5,13 @@ import { BlogsController } from '../../controllers/blogs.controller';
 import { CommentsController } from '../../controllers/comments.controller';
 // import { AppConstants } from '../../constants/app.constants';
 import { UsersController } from '../../controllers/users.controller';
+import { InterestsController } from '../../controllers/interest.controller';
 
 const blogController = new BlogsController();
 const commentsController = new CommentsController();
 const usersController = new UsersController();
+const interestsController = new InterestsController();
+
 
 const resolvers: IResolvers = {
   Query: {
@@ -18,9 +21,11 @@ const resolvers: IResolvers = {
     blogs: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return blogController.getBlogs(args, ctx);
     },
-    // signin: (_, args: any, ctx: Context) => {
-    //   return usersController.authenticateUser(args, ctx);
-    // },
+    interests: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      console.log("need to get inyeresys");
+
+      return interestsController.getInterests(args, ctx)
+    },
   },
 
   Mutation: {

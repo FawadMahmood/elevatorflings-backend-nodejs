@@ -191,6 +191,22 @@ type Query{
 }
 
 
+type Interest{
+  _id:ID!
+  title:String
+  addedBy:ID!
+}
+
+type InterestsPayload{
+  interests:[Interest]
+  error:Error
+}
+
+type Query{
+  interests:InterestsPayload
+}
+
+
 
 input InputBlog {
   title: String
