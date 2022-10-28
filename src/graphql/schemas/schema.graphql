@@ -206,7 +206,13 @@ type Query{
   interests:InterestsPayload
 }
 
+input InputInterests {
+  interests:[String]
+}
 
+type Mutation {
+  updateInterests(interests:[String]): GenericPayload
+}
 
 input InputBlog {
   title: String

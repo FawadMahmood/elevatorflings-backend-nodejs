@@ -55,7 +55,7 @@ export class UsersController {
       }
     });
 
-    if (!userInfo.completed) {
+    if (!userInfo.completed && userInfo.step === 1) {
       Users.findOneAndUpdate({ _id: ctx._id }, {
         $set: {
           step: 2,

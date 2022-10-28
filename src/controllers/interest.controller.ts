@@ -3,6 +3,7 @@ import { VerifyAuthorization } from '../decorators/auth.decorator';
 import { Model, ObjectId } from 'mongoose';
 
 const Interests: Model<any> = require('../models/interests');
+const Users: Model<any> = require('../models/users');
 
 
 const interests = [
@@ -22,6 +23,36 @@ export class InterestsController {
         return {
             interests: interests,
             error: null
+        } as any
+    }
+
+
+    @VerifyAuthorization
+    async setInterests(inputObject: any, ctx: Context) {
+        const input = inputObject;
+        console.log("interests contain", input);
+
+        const user = await Users.findOneAndUpdate({ _id: ctx._id }, {
+            $set: {
+                interests: input.interests
+            }
+        });
+
+        if (!user.completed) {
+            Users.findOneAndUpdate({ _id: ctx._id }, {
+                $set: {
+                    completed: true,
+                    step: 3
+                }
+            }).then(response => {
+                console.log("completed updated.");
+            });
+        }
+
+
+        return {
+            error: null,
+            success: true,
         } as any
     }
 }
