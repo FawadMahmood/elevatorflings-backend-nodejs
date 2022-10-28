@@ -49,15 +49,12 @@ const UserSchema = new mongoose.Schema(
     },
     facebookId: {
       type: String,
-      unique: true,
     },
     googleId: {
       type: String,
-      unique: true,
     },
     appleId: {
       type: String,
-      unique: true,
     },
     location: {
       type: pointSchema,
