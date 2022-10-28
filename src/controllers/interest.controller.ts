@@ -30,7 +30,6 @@ export class InterestsController {
     @VerifyAuthorization
     async setInterests(inputObject: any, ctx: Context) {
         const input = inputObject;
-        console.log("interests contain", input);
 
         const user = await Users.findOneAndUpdate({ _id: ctx._id }, {
             $set: {

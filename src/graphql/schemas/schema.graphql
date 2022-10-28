@@ -12,7 +12,7 @@ type User {
   name: String!
   photoUrl: String
   phone: Phone
-  age: Int!
+  dob: Date!
   facebookId: String
   googleId: String
   appleId: String
