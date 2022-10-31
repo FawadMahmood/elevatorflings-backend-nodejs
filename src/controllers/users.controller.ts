@@ -16,12 +16,6 @@ const Phone: Model<any> = require('../models/phone');
 export class UsersController {
   @ValidateUserInput
   async addUser(inputObject: any, ctx: Context) {
-    // const _queue: typeof Queue = ctx.queue;
-
-    // @ts-ignore
-    // _queue.add({ video: 'http://example.com/video1.mov' });
-    // console.log("context has queue? ", _queue);
-
     try {
       const { phone, ...input } = inputObject.input;
       const userInfo = new Users(input);
@@ -30,6 +24,8 @@ export class UsersController {
       const promises = await Promise.all([await userInfo.save(), _phone.save()]).then(() => console.log("adding user success"));
       return { user: { ...userInfo._doc, phone: _phone, accessToken: userInfo.generateToken() }, error: null } as any;
     } catch (error) {
+      console.log("error adding user", error);
+
       return {
         error: {
           message: "User with same email already exist.",

@@ -69,8 +69,6 @@ const resolvers: IResolvers = {
       return usersController.setLocation(args, ctx);
     },
     updateInterests: async (_: any, args: any, ctx: Context) => {
-      console.log("updateInterests", args);
-
       return interestsController.setInterests(args, ctx);
     }
   },

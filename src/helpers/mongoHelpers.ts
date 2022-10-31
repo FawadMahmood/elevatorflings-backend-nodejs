@@ -1,4 +1,6 @@
 const User: mongoose.Model<any> = require('../models/users');
+const Feed: mongoose.Model<any> = require('../models/feed');
+
 import mongoose = require('mongoose');
 import * as jwt from 'jsonwebtoken';
 import { Config } from '../config';
@@ -7,13 +9,54 @@ import Queue from 'bull';
 const feedsQueue = new Queue('Home Page Feeds Queue', { redis: { port: 6379, host: '127.0.0.1', password: '' } });
 
 
-feedsQueue.process(function (job, done) {
+feedsQueue.process(async function (job, done) {
   // transcode image asynchronously and report progress
   // job.progress(42);
 
-  const data: { _id: string, new: boolean } = job.data;
+  const { _id, new: isNew } = job.data;
+  console.time("feedJobQueue");
+  // const { _id, new } = job.data;
+  const user = await User.findById(_id);
+  const nearUsers = await User.find({
+    location: {
+      $near:
+      {
+        $geometry: user.location,
+        $minDistance: 0,
+        $maxDistance: 1000
+      }
+    }
+  })
 
-  console.log("queue job ran", job.data);
+
+  for (let i = 0; i < nearUsers.length; i++) {
+    const user_ref = nearUsers[i]._doc;
+    if (user_ref._id.toString() !== _id) {
+      const check_if_exists = await Feed.findOne({
+        $and: [
+          { user: _id },
+          { ref_user: user_ref._id },
+        ]
+      });
+
+      if (!check_if_exists && user_ref.location) {
+        const feed = new Feed({
+          name: user_ref.name,
+          interests: user_ref.interests,
+          user: _id,
+          ref_user: user_ref._id,
+          location: user_ref.location,
+        });
+        console.log("adding feed", feed);
+        feed.save();
+      }
+    }
+  }
+
+
+  console.log("queue job ran completed");
+  console.timeEnd("feedJobQueue");
+
 
 
   // call done when finished
@@ -63,11 +106,10 @@ export class MongoHelper {
    */
   public initiateMongoConnection(): void {
     (<any>mongoose).Promise = global.Promise;
-    mongoose
-      .connect(Config.mongoUrl, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-      })
+    mongoose.connect(Config.mongoUrl, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    })
       .then(() => {
         console.log('Connected to MongoDb');
       })
