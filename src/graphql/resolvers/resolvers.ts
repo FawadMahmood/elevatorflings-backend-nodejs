@@ -6,11 +6,14 @@ import { CommentsController } from '../../controllers/comments.controller';
 // import { AppConstants } from '../../constants/app.constants';
 import { UsersController } from '../../controllers/users.controller';
 import { InterestsController } from '../../controllers/interest.controller';
+import { FeedController } from '../../controllers/feed.controller';
 
 const blogController = new BlogsController();
 const commentsController = new CommentsController();
 const usersController = new UsersController();
 const interestsController = new InterestsController();
+const feedController = new FeedController();
+
 
 
 const resolvers: IResolvers = {
@@ -29,6 +32,9 @@ const resolvers: IResolvers = {
     me: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       console.log("user info");
       return usersController.me(args, ctx);
+    },
+    feeds: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      return feedController.getFeeds(args, ctx);
     }
   },
 

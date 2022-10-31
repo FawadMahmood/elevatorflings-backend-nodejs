@@ -1,6 +1,28 @@
 scalar Date
 
 
+
+type Query{
+  feeds(first:Int! cursor:String!):FeedsPayload
+}
+
+type FeedsPayload {
+    error: Error
+    feeds: [Feed]
+}
+
+type Feed{
+  name:String
+  interests:[Interest]
+  location: Location
+  user:User
+  ignored:Boolean
+  match:Boolean
+}
+
+
+
+
 type Location{ 
   coordinates:[Float]
 }
