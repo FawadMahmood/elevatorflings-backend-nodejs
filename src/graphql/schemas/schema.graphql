@@ -3,7 +3,7 @@ scalar Date
 
 
 type Query{
-  feeds(first:Int! cursor:String!):FeedsPayload
+  feeds(first:Int! cursor:String! distance:Float!):FeedsPayload
 }
 
 type FeedsPayload {
@@ -15,9 +15,20 @@ type Feed{
   name:String
   interests:[Interest]
   location: Location
-  user:User
+  ref_user:UserFeed
   ignored:Boolean
   match:Boolean
+}
+
+
+type UserFeed {
+  _id:ID!
+  email: String!
+  username: String!
+  name: String!
+  photoUrl: String
+  dob: Date!
+  gender:Gender
 }
 
 
@@ -233,7 +244,6 @@ type InterestsPayload{
 type Query{
   interests:InterestsPayload
 }
-
 
 
 input InputInterests {

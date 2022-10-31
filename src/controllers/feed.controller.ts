@@ -9,7 +9,7 @@ const User: mongoose.Model<any> = require('../models/users');
 export class FeedController {
     @VerifyAuthorization
     async getFeeds(args: any, ctx: Context) {
-        const { first, cursor } = args;
+        const { first, cursor, distance } = args;
         const user = await User.findById(ctx._id);
         const feeds = await Feed.find({
             $and: [
@@ -19,7 +19,7 @@ export class FeedController {
                         {
                             $geometry: user.location,
                             $minDistance: 0,
-                            $maxDistance: 1000
+                            $maxDistance: distance ? distance : 1000
                         }
                     }
                 },
@@ -36,10 +36,11 @@ export class FeedController {
                     _id: { $gt: new mongoose.Types.ObjectId(cursor) }
                 } : {}
             ],
-        }).limit(first ? first : 5).explain();
+        }).limit(first ? first : 5).populate('interests', '_id title addedBy').populate('ref_user').populate('ref_user.phone');
 
 
-        console.log("trying to get feeds", feeds);
+
+        console.log("trying to get feeds", feeds.length);
 
         return {
             feeds: feeds
