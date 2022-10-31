@@ -25,6 +25,11 @@ type User {
   step:Int
 }
 
+
+type Query{
+  me:AddUserPayload
+}
+
 enum Gender {
   MALE
   FEMALE
@@ -206,6 +211,8 @@ type InterestsPayload{
 type Query{
   interests:InterestsPayload
 }
+
+
 
 input InputInterests {
   interests:[String]

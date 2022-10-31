@@ -5,5 +5,10 @@ export interface Context {
   isUserLogged?: boolean;
   email?: string;
   _id?: string;
-  queue: typeof Queue;
+  queue: {
+    add: (props: { _id: string, new: boolean }) => void;
+  };
+  update: {
+    add: (props: { _id: string, key: string, value: object }) => void;
+  };
 }

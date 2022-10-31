@@ -42,8 +42,13 @@ export class UsersController {
   }
 
   @VerifyAuthorization
+  async me(inputObject: any, ctx: Context) {
+    let userInfo = await Users.findById(ctx._id).populate('phone', '_id primary phone');
+    return { user: userInfo } as any;
+  }
+
+  @VerifyAuthorization
   async setLocation(inputObject: any, ctx: Context) {
-    const _queue: typeof Queue = ctx.queue;
     const input = inputObject.input;
     const userInfo = await Users.findOneAndUpdate({ _id: ctx._id }, {
       $set: {
@@ -60,11 +65,9 @@ export class UsersController {
         console.log("step updated.");
       });
 
-      // @ts-ignore
-      _queue.add({ _id: ctx._id, new: true });
+      ctx.queue.add({ _id: ctx._id as string, new: true });
     } else {
-      // @ts-ignore
-      _queue.add({ _id: ctx._id, new: false });
+      ctx.queue.add({ _id: ctx._id as string, new: false });
     }
 
     return {

@@ -37,6 +37,7 @@ export class InterestsController {
             }
         });
 
+        ctx.update.add({ _id: ctx._id as string, key: 'interests', value: input.interests });
         if (!user.completed) {
             Users.findOneAndUpdate({ _id: ctx._id }, {
                 $set: {

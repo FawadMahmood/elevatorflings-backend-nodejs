@@ -7,7 +7,28 @@ import { Config } from '../config';
 import Queue from 'bull';
 
 const feedsQueue = new Queue('Home Page Feeds Queue', { redis: { port: 6379, host: '127.0.0.1', password: '' } });
+const updateFeedQueue = new Queue('Feeds Records Update Queue', { redis: { port: 6379, host: '127.0.0.1', password: '' } });
 
+
+updateFeedQueue.process(async function (job, done) {
+  const { _id, key, value } = job.data;
+
+  console.log("feeds must update", job.data);
+  console.time("updateFeedQueue");
+  await Feed.updateMany({
+    ref_user: _id,
+  }, {
+    $set: {
+      [key]: value
+    }
+  })
+
+  console.timeEnd("updateFeedQueue");
+
+
+  done();
+
+})
 
 feedsQueue.process(async function (job, done) {
   // transcode image asynchronously and report progress
@@ -31,7 +52,10 @@ feedsQueue.process(async function (job, done) {
 
   for (let i = 0; i < nearUsers.length; i++) {
     const user_ref = nearUsers[i]._doc;
+
+
     if (user_ref._id.toString() !== _id) {
+      //add to current user feed start
       const check_if_exists = await Feed.findOne({
         $and: [
           { user: _id },
@@ -47,9 +71,38 @@ feedsQueue.process(async function (job, done) {
           ref_user: user_ref._id,
           location: user_ref.location,
         });
-        console.log("adding feed", feed);
         feed.save();
       }
+      //add to current user feed end
+    }
+  }
+
+
+
+  for (let i = 0; i < nearUsers.length; i++) {
+    //add to other user feed start
+
+    const user_ref = nearUsers[i]._doc;
+    if (user_ref._id.toString() !== _id) {
+      const check_if_exists = await Feed.findOne({
+        $and: [
+          { user: user_ref._id },
+          { ref_user: _id },
+        ]
+      });
+
+      if (!check_if_exists && user.location) {
+        const feed = new Feed({
+          name: user.name,
+          interests: user.interests,
+          user: user_ref._id,
+          ref_user: user._id,
+          location: user.location,
+        });
+        feed.save();
+      }
+      //add to other user feed start
+
     }
   }
 
@@ -88,16 +141,16 @@ export class MongoHelper {
         const id = payload._id;
         return await User.findById(id).then((response: any) => {
           if (response) {
-            return { isUserLogged: true, _id: response._id, email: response.email, queue: feedsQueue };
+            return { isUserLogged: true, _id: response._id, email: response.email, queue: feedsQueue, update: updateFeedQueue };
           }
 
-          return { isUserLogged: false, queue: feedsQueue };
+          return { isUserLogged: false, queue: feedsQueue, update: updateFeedQueue };
         });
       } catch (error) {
-        return { isUserLogged: false, queue: feedsQueue };
+        return { isUserLogged: false, queue: feedsQueue, update: updateFeedQueue };
       }
     } else {
-      return { isUserLogged: false, queue: feedsQueue };
+      return { isUserLogged: false, queue: feedsQueue, update: updateFeedQueue };
     }
   }
 

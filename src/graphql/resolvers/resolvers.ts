@@ -26,6 +26,10 @@ const resolvers: IResolvers = {
 
       return interestsController.getInterests(args, ctx)
     },
+    me: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      console.log("user info");
+      return usersController.me(args, ctx);
+    }
   },
 
   Mutation: {
