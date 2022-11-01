@@ -36,7 +36,7 @@ export class FeedController {
                     _id: { $gt: new mongoose.Types.ObjectId(cursor) }
                 } : {}
             ],
-        }).limit(first ? first : 5).populate('interests', '_id title addedBy').populate('ref_user').populate('ref_user.phone');
+        }).limit(first ? first : 5).populate('interests', '_id title addedBy').populate('ref_user');
 
 
 
