@@ -92,6 +92,9 @@ const UserSchema = new mongoose.Schema(
     dob: {
       type: Date,
       required: true
+    },
+    address: {
+      type: String
     }
   },
   {
