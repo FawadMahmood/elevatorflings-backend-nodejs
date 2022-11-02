@@ -12,6 +12,7 @@ type FeedsPayload {
 }
 
 type Feed{
+  _id:ID
   name:String
   interests:[Interest]
   location: Location

@@ -39,9 +39,6 @@ export class FeedController {
         }).limit(first ? first : 5).populate('interests', '_id title addedBy').populate('ref_user');
 
 
-
-        console.log("trying to get feeds", feeds.length);
-
         return {
             feeds: feeds
         } as any;
