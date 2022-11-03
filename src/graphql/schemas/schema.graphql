@@ -83,6 +83,8 @@ type Mutation {
 
 input InputLocation {
   location:ILocation
+  country:String
+  city:String
 }
 
 type GenericPayload {

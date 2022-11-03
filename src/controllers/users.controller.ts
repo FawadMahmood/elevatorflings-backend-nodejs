@@ -50,11 +50,24 @@ export class UsersController {
   @VerifyAuthorization
   async setLocation(inputObject: any, ctx: Context) {
     const input = inputObject.input;
-    const userInfo = await Users.findOneAndUpdate({ _id: ctx._id }, {
-      $set: {
-        location: input.location,
-      }
-    });
+
+    let userInfo;
+
+    if (input.country) {
+      userInfo = await Users.findOneAndUpdate({ _id: ctx._id }, {
+        $set: {
+          location: input.location,
+          country: input.country,
+          city: input.city,
+        }
+      });
+    } else {
+      userInfo = await Users.findOneAndUpdate({ _id: ctx._id }, {
+        $set: {
+          location: input.location,
+        }
+      });
+    }
 
     if (!userInfo.completed && userInfo.step === 1) {
       Users.findOneAndUpdate({ _id: ctx._id }, {
