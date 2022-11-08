@@ -19,6 +19,7 @@ type Feed{
   ref_user:UserFeed
   ignored:Boolean
   match:Boolean
+  gender:String
 }
 
 
@@ -29,7 +30,6 @@ type UserFeed {
   name: String!
   photoUrl: String
   dob: Date!
-  gender:Gender
   address:String
 }
 
