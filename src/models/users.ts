@@ -36,6 +36,7 @@ const UserSchema = new mongoose.Schema(
     },
     photoUrl: {
       type: String,
+      default: "https://loremflickr.com/500/500/boy,girl/all"
     },
     gender: {
       type: String,
