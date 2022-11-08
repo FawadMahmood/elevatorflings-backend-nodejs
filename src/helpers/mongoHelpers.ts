@@ -70,6 +70,7 @@ feedsQueue.process(async function (job, done) {
           user: _id,
           ref_user: user_ref._id,
           location: user_ref.location,
+          gender: user_ref.gender
         });
         feed.save();
       }
@@ -98,6 +99,7 @@ feedsQueue.process(async function (job, done) {
           user: user_ref._id,
           ref_user: user._id,
           location: user.location,
+          gender: user.gender
         });
         feed.save();
       }

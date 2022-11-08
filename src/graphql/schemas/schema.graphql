@@ -49,6 +49,8 @@ type User {
   phone: Phone
   dob: Date!
   facebookId: String
+  city:String
+  country:String
   googleId: String
   appleId: String
   location: Location

@@ -35,6 +35,9 @@ const FeedSchema = new mongoose.Schema(
             ref: 'User',
             required: true
         },
+        gender: {
+            type: String,
+        },
         ignored: {
             type: Boolean,
             default: false
