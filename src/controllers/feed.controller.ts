@@ -27,12 +27,6 @@ export class FeedController {
             {
                 user: ctx._id
             },
-            {
-                ignored: false
-            },
-            {
-                match: false,
-            },
             cursor ? {
                 _id: { $gt: new mongoose.Types.ObjectId(cursor) }
             } : {}
@@ -57,6 +51,15 @@ export class FeedController {
             )
         }
 
+        if (!filters && !interests) {
+            conditions.push({
+                ignored: false
+            });
+
+            conditions.push({
+                match: false,
+            });
+        }
 
 
 
