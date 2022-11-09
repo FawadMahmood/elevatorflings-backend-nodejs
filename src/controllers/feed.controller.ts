@@ -61,8 +61,6 @@ export class FeedController {
             });
         }
 
-
-
         let applied_filters = {
             $and: [
                 ...conditions,
