@@ -18,7 +18,7 @@ export class UsersController {
   async addUser(inputObject: any, ctx: Context) {
     try {
       const { phone, ...input } = inputObject.input;
-      const userInfo = new Users(input);
+      const userInfo = new Users({ ...input, email: input.email.toLocaleLowerCase() });
       const _phone = new Phone({ phone: phone, primary: true, user: userInfo._id });
       userInfo.phone = _phone._id;
       const promises = await Promise.all([await userInfo.save(), _phone.save()]).then(() => console.log("adding user success"));
@@ -204,7 +204,7 @@ export class UsersController {
 
   async authenticateUser(args: any, ctx: Context) {
     let user = await Users.findOne({
-      $or: [{ email: args.email }, { username: args.email }],
+      $or: [{ email: args.email.toLocaleLowerCase() }, { username: args.email.toLocaleLowerCase() }],
     }).populate('phone', 'phone primary');
 
     if (user) {
