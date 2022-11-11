@@ -23,6 +23,8 @@ type Feed{
   ignored:Boolean
   match:Boolean
   gender:String
+  city:String
+  country:String
 }
 
 

@@ -14,7 +14,7 @@ const addUserValidationScheema = Joi.object({
     location: locationValidation,
     phone: Joi.string().required(),
     dob: Joi.date().required(),
-    gender: Joi.string().valid('MALE', 'FEMALE', 'NONE').required(),
+    gender: Joi.string().valid('MALE', 'FEMALE', 'TRANS', 'NONE').required(),
 });
 
 

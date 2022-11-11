@@ -46,6 +46,12 @@ const FeedSchema = new mongoose.Schema(
             type: Boolean,
             default: false
         },
+        city: {
+            type: String,
+        },
+        country: {
+            type: String,
+        }
     },
     {
         timestamps: true,
