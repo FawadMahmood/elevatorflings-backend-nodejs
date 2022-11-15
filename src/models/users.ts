@@ -103,6 +103,10 @@ const UserSchema = new mongoose.Schema(
     city: {
       type: String
     },
+    status: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Status',
+    },
   },
   {
     timestamps: true,

@@ -1,8 +1,9 @@
 import mongoose = require('mongoose');
 import { Context } from '../models/context';
 import { VerifyAuthorization } from '../decorators/auth.decorator';
+import { UserType } from '../utils/types';
 const Feed: mongoose.Model<any> = require('../models/feed');
-const User: mongoose.Model<any> = require('../models/users');
+const User: mongoose.Model<UserType> = require('../models/users');
 
 
 
@@ -18,7 +19,7 @@ export class FeedController {
                 location: {
                     $near:
                     {
-                        $geometry: user.location,
+                        $geometry: user?.location,
                         $minDistance: 0,
                         $maxDistance: distance ? distance : 1000
                     }

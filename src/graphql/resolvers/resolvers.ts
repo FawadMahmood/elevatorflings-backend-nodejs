@@ -7,13 +7,14 @@ import { CommentsController } from '../../controllers/comments.controller';
 import { UsersController } from '../../controllers/users.controller';
 import { InterestsController } from '../../controllers/interest.controller';
 import { FeedController } from '../../controllers/feed.controller';
+import { StatusController } from '../../controllers/status.controller';
 
 const blogController = new BlogsController();
 const commentsController = new CommentsController();
 const usersController = new UsersController();
 const interestsController = new InterestsController();
 const feedController = new FeedController();
-
+const statusController = new StatusController();
 
 
 const resolvers: IResolvers = {
@@ -35,6 +36,9 @@ const resolvers: IResolvers = {
     },
     feeds: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return feedController.getFeeds(args, ctx);
+    },
+    statuses: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      return statusController.getStatuses(args, ctx);
     }
   },
 
@@ -80,6 +84,9 @@ const resolvers: IResolvers = {
     },
     updateInterests: async (_: any, args: any, ctx: Context) => {
       return interestsController.setInterests(args, ctx);
+    },
+    addStatus: async (_: any, args: any, ctx: Context) => {
+      return statusController.addStatus(args, ctx);
     }
   },
 };
