@@ -311,3 +311,18 @@ type StatusesPayload{
 type Query{
   statuses:StatusesPayload
 }
+
+input ImagePayload{
+    imageUrl:String
+    primary:Boolean
+}
+
+input InputStepContinue{
+  step:Int
+  images:[ImagePayload]
+  status:String
+}
+
+type Mutation {
+  completeStep(input:InputStepContinue): GenericPayload
+}

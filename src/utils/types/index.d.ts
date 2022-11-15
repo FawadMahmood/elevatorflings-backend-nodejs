@@ -34,6 +34,17 @@ export interface StatusType {
 }
 
 
+type ImagePayload = {
+    imageUrl: string;
+    primary: boolean;
+}
+
+interface CompleteStatusType {
+    step: number;
+    images: ImagePayload[];
+    status: string;
+}
+
 interface Interest {
 
 }

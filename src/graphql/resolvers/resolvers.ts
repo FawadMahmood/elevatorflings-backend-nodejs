@@ -8,6 +8,8 @@ import { UsersController } from '../../controllers/users.controller';
 import { InterestsController } from '../../controllers/interest.controller';
 import { FeedController } from '../../controllers/feed.controller';
 import { StatusController } from '../../controllers/status.controller';
+import { StepsController } from '../../controllers/steps.controller';
+
 
 const blogController = new BlogsController();
 const commentsController = new CommentsController();
@@ -15,6 +17,8 @@ const usersController = new UsersController();
 const interestsController = new InterestsController();
 const feedController = new FeedController();
 const statusController = new StatusController();
+const stepsController = new StepsController();
+
 
 
 const resolvers: IResolvers = {
@@ -87,6 +91,9 @@ const resolvers: IResolvers = {
     },
     addStatus: async (_: any, args: any, ctx: Context) => {
       return statusController.addStatus(args, ctx);
+    },
+    completeStep: async (_: any, args: any, ctx: Context) => {
+      return stepsController.completeStep(args, ctx);
     }
   },
 };
