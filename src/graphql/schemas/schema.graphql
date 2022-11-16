@@ -290,6 +290,7 @@ input InputComment {
 
 
 type Status{
+  _id:ID!
   name:String
   imageUrl:String
 }
