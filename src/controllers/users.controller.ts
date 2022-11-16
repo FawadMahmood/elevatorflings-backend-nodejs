@@ -72,7 +72,7 @@ export class UsersController {
     if (!userInfo.completed && userInfo.step === 1) {
       Users.findOneAndUpdate({ _id: ctx._id }, {
         $set: {
-          step: 2,
+          step: 3,
         }
       }).then(response => {
         console.log("step updated.");

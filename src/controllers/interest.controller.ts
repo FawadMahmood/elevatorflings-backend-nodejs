@@ -41,7 +41,7 @@ export class InterestsController {
         if (!user.completed) {
             Users.findOneAndUpdate({ _id: ctx._id }, {
                 $set: {
-                    step: 3
+                    step: 4
                 }
             }).then(response => {
                 console.log("completed updated.");

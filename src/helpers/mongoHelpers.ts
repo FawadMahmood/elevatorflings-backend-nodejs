@@ -1,10 +1,11 @@
-const User: mongoose.Model<any> = require('../models/users');
+const User: mongoose.Model<UserType> = require('../models/users');
 const Feed: mongoose.Model<any> = require('../models/feed');
 
 import mongoose = require('mongoose');
 import * as jwt from 'jsonwebtoken';
 import { Config } from '../config';
 import Queue from 'bull';
+import { UserType } from '../utils/types';
 
 const feedsQueue = new Queue('Home Page Feeds Queue', { redis: { port: 6379, host: '127.0.0.1', password: '' } });
 const updateFeedQueue = new Queue('Feeds Records Update Queue', { redis: { port: 6379, host: '127.0.0.1', password: '' } });
@@ -38,11 +39,12 @@ feedsQueue.process(async function (job, done) {
   console.time("feedJobQueue");
   // const { _id, new } = job.data;
   const user = await User.findById(_id);
+
   const nearUsers = await User.find({
     location: {
       $near:
       {
-        $geometry: user.location,
+        $geometry: user?.location,
         $minDistance: 0,
         $maxDistance: 1000
       }
@@ -73,6 +75,7 @@ feedsQueue.process(async function (job, done) {
           gender: user_ref.gender,
           city: user_ref.city,
           country: user_ref.country,
+          status: user_ref.status
         });
         feed.save();
       }
@@ -94,7 +97,7 @@ feedsQueue.process(async function (job, done) {
         ]
       });
 
-      if (!check_if_exists && user.location) {
+      if (!check_if_exists && user?.location) {
         const feed = new Feed({
           name: user.name,
           interests: user.interests,
@@ -104,6 +107,7 @@ feedsQueue.process(async function (job, done) {
           gender: user.gender,
           city: user.city,
           country: user.country,
+          status: user.status
         });
         feed.save();
       }

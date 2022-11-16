@@ -1,4 +1,5 @@
 export interface UserType {
+    _id: string;
     email: string;
     username: string;
     name: string;
@@ -26,6 +27,7 @@ export interface UserType {
     country?: string;
     city?: string;
     status: "RELATIONSHIP" | "FRIENDSHIP" | "FLINGS" | "NETWORKING";
+    _doc: UserType
 }
 
 export interface StatusType {

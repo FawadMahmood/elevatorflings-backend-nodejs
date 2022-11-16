@@ -51,7 +51,11 @@ const FeedSchema = new mongoose.Schema(
         },
         country: {
             type: String,
-        }
+        },
+        status: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Status',
+        },
     },
     {
         timestamps: true,
