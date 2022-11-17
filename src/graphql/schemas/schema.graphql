@@ -39,6 +39,14 @@ type UserFeed {
 }
 
 
+type FeedPayload {
+    error: Error
+    feed: Feed
+}
+
+type Query{
+  feed(user_id:String! ref_id:String!):FeedPayload
+}
 
 
 type Location{ 
@@ -327,3 +335,5 @@ input InputStepContinue{
 type Mutation {
   completeStep(input:InputStepContinue): GenericPayload
 }
+
+

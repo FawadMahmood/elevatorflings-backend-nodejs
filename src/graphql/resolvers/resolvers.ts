@@ -41,6 +41,9 @@ const resolvers: IResolvers = {
     feeds: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return feedController.getFeeds(args, ctx);
     },
+    feed: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      return feedController.getFeed(args, ctx);
+    },
     statuses: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return statusController.getStatuses(args, ctx);
     }

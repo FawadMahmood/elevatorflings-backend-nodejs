@@ -5,7 +5,10 @@ import { UserType } from '../utils/types';
 const Feed: mongoose.Model<any> = require('../models/feed');
 const User: mongoose.Model<UserType> = require('../models/users');
 
-
+type FeedVariables = {
+    user_id: string;
+    ref_id: string;
+}
 
 export class FeedController {
     @VerifyAuthorization
@@ -75,5 +78,15 @@ export class FeedController {
         return {
             feeds: feeds
         } as any;
+    }
+
+    @VerifyAuthorization
+    async getFeed(args: FeedVariables, ctx: Context) {
+        console.log("get feed", args);
+        const feed = await Feed.findOne({ $and: [{ user: args.user_id }, { ref_user: args.ref_id }] }).populate('interests', '_id title addedBy').populate('ref_user')
+        console.log("get feed", feed);
+
+        return { feed } as any;
+
     }
 }
