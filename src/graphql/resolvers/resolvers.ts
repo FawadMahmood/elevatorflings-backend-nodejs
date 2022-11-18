@@ -10,6 +10,7 @@ import { FeedController } from '../../controllers/feed.controller';
 import { StatusController } from '../../controllers/status.controller';
 import { StepsController } from '../../controllers/steps.controller';
 import { SeederController } from '../../controllers/seeder.controller';
+import { LocalizationController } from '../../controllers/localization.controller';
 
 
 const blogController = new BlogsController();
@@ -20,13 +21,15 @@ const feedController = new FeedController();
 const statusController = new StatusController();
 const stepsController = new StepsController();
 const seederController = new SeederController();
+const localizationController = new LocalizationController();
+
 
 
 
 
 const resolvers: IResolvers = {
   Query: {
-    seedcountry:(_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+    seedcountry: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return seederController.generateCountryData(args, ctx);
     },
 
@@ -54,6 +57,10 @@ const resolvers: IResolvers = {
     },
     statuses: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return statusController.getStatuses(args, ctx);
+    },
+
+    getStatesByCountryCode: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      return localizationController.getStatesByCountryCode(args, ctx);
     }
   },
 

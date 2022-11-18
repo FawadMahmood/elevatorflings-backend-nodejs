@@ -97,15 +97,17 @@ const UserSchema = new mongoose.Schema(
     address: {
       type: String
     },
-    country: {
-      type: String
-    },
-    city: {
-      type: String
-    },
     status: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Status',
+    },
+    state: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'State',
+    },
+    country: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Country',
     },
   },
   {

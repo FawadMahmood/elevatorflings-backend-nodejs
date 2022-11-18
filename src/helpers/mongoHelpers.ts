@@ -73,9 +73,9 @@ feedsQueue.process(async function (job, done) {
           ref_user: user_ref._id,
           location: user_ref.location,
           gender: user_ref.gender,
-          city: user_ref.city,
+          status: user_ref.status,
+          state: user_ref.state,
           country: user_ref.country,
-          status: user_ref.status
         });
         feed.save();
       }
@@ -105,9 +105,9 @@ feedsQueue.process(async function (job, done) {
           ref_user: user._id,
           location: user.location,
           gender: user.gender,
-          city: user.city,
+          status: user.status,
+          state: user.state,
           country: user.country,
-          status: user.status
         });
         feed.save();
       }

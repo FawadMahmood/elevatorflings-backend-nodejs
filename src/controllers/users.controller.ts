@@ -8,24 +8,29 @@ import otpGenerator from 'otp-generator'
 import { VerifyAuthorization } from '../decorators/auth.decorator';
 import { ValidateUserInput } from '../decorators/validation.decorator';
 import Queue from 'bull';
+import { CountryType, StateType } from '../utils/types';
 
 
 const Users: Model<any> = require('../models/users');
 const Phone: Model<any> = require('../models/phone');
+const State: Model<StateType> = require('../models/state');
+const Country: Model<CountryType> = require('../models/country');
+
 
 export class UsersController {
   @ValidateUserInput
   async addUser(inputObject: any, ctx: Context) {
     try {
       const { phone, ...input } = inputObject.input;
-      const userInfo = new Users({ ...input, email: input.email.toLocaleLowerCase() });
+      const state = await State.findById(input.state);
+      const country = await Country.findById(state?.country_id);
+
+      const userInfo = new Users({ ...input, email: input.email.toLocaleLowerCase(), country: state?.country_id });
       const _phone = new Phone({ phone: phone, primary: true, user: userInfo._id });
       userInfo.phone = _phone._id;
       const promises = await Promise.all([await userInfo.save(), _phone.save()]).then(() => console.log("adding user success"));
-      return { user: { ...userInfo._doc, phone: _phone, accessToken: userInfo.generateToken() }, error: null } as any;
+      return { user: { ...userInfo._doc, state, country, phone: _phone, accessToken: userInfo.generateToken() }, error: null } as any;
     } catch (error) {
-      console.log("error adding user", error);
-
       return {
         error: {
           message: "User with same email already exist.",
@@ -43,7 +48,7 @@ export class UsersController {
 
   @VerifyAuthorization
   async me(inputObject: any, ctx: Context) {
-    let userInfo = await Users.findById(ctx._id).populate('phone', '_id primary phone');
+    let userInfo = await Users.findById(ctx._id).populate('phone', '_id primary phone').populate('state').populate('country');;
     return { user: userInfo } as any;
   }
 
@@ -57,8 +62,8 @@ export class UsersController {
       userInfo = await Users.findOneAndUpdate({ _id: ctx._id }, {
         $set: {
           location: input.location,
-          country: input.country,
-          city: input.city,
+          // country: input.country,
+          // city: input.city,
         }
       });
     } else {
@@ -205,7 +210,7 @@ export class UsersController {
   async authenticateUser(args: any, ctx: Context) {
     let user = await Users.findOne({
       $or: [{ email: args.email.toLocaleLowerCase() }, { username: args.email.toLocaleLowerCase() }],
-    }).populate('phone', 'phone primary');
+    }).populate('phone', 'phone primary').populate('state').populate('country');
 
     if (user) {
       const authenticate = await user.authenticate(args.password);

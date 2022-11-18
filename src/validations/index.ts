@@ -15,6 +15,7 @@ const addUserValidationScheema = Joi.object({
     phone: Joi.string().required(),
     dob: Joi.date().required(),
     gender: Joi.string().valid('MALE', 'FEMALE', 'TRANS', 'NONE').required(),
+    state: Joi.string().required(),
 });
 
 

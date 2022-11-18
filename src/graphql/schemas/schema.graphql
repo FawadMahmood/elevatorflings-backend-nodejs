@@ -56,6 +56,14 @@ type Location {
   coordinates: [Float]
 }
 
+type Country{
+  _id:ID!
+  name:String
+  phone_code:String
+  short_name:String
+  enable:Boolean
+}
+
 type User {
   _id: ID!
   email: String!
@@ -65,8 +73,8 @@ type User {
   phone: Phone
   dob: Date!
   facebookId: String
-  city: String
-  country: String
+  state: State
+  country: Country
   googleId: String
   appleId: String
   location: Location
@@ -99,9 +107,7 @@ type Mutation {
 }
 
 input InputLocation {
-  location: ILocation
-  country: String
-  city: String
+  location: ILocation!
 }
 
 type GenericPayload {
@@ -166,16 +172,17 @@ type Mutation {
 }
 
 input InputUser {
-  email: String
-  name: String
-  provider: String
+  email: String!
+  name: String!
+  provider: String!
   photoUrl: String
-  username: String
-  phone: String
+  username: String!
+  phone: String!
+  state: String!
   dob: Date!
   location: ILocation
-  password: String
-  gender: String
+  password: String!
+  gender: String!
 }
 
 input ILocation {
@@ -328,4 +335,19 @@ type Mutation {
 
 type Query {
   seedcountry: GenericPayload
+}
+
+type State{
+  _id:ID!
+  name:String!
+  country_id:String!
+}
+
+type StatesPayload {
+  states: [State]
+  error: Error
+}
+
+type Query{
+  getStatesByCountryCode(countryCode:String!):StatesPayload
 }

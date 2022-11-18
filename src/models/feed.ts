@@ -46,15 +46,17 @@ const FeedSchema = new mongoose.Schema(
             type: Boolean,
             default: false
         },
-        city: {
-            type: String,
-        },
-        country: {
-            type: String,
-        },
         status: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Status',
+        },
+        state: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'State',
+        },
+        country: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Country',
         },
     },
     {

@@ -8,7 +8,7 @@ const StateScheema = new mongoose.Schema(
         country_id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Country',
-          },
+        },
     },
     {
         timestamps: true,

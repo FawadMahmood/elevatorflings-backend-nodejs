@@ -28,6 +28,7 @@ export interface UserType {
     city?: string;
     status: "RELATIONSHIP" | "FRIENDSHIP" | "FLINGS" | "NETWORKING";
     _doc: UserType
+    state: string
 }
 
 export interface StatusType {
@@ -52,19 +53,19 @@ interface Interest {
 }
 
 
-interface CountryType{
-    name:string;
-    phone_code:number;
-    short_name:string;
-    enable:boolean;
+interface CountryType {
+    name: string;
+    phone_code: number;
+    short_name: string;
+    enable: boolean;
 }
 
-interface StateType{
-    name:string;
-    country_id:string;
+interface StateType {
+    name: string;
+    country_id: string;
 }
 
-interface CityType{
-    name:string;
-    state_id:string;
+interface CityType {
+    name: string;
+    state_id: string;
 }
