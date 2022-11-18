@@ -9,6 +9,7 @@ import { InterestsController } from '../../controllers/interest.controller';
 import { FeedController } from '../../controllers/feed.controller';
 import { StatusController } from '../../controllers/status.controller';
 import { StepsController } from '../../controllers/steps.controller';
+import { SeederController } from '../../controllers/seeder.controller';
 
 
 const blogController = new BlogsController();
@@ -18,11 +19,18 @@ const interestsController = new InterestsController();
 const feedController = new FeedController();
 const statusController = new StatusController();
 const stepsController = new StepsController();
+const seederController = new SeederController();
+
 
 
 
 const resolvers: IResolvers = {
   Query: {
+    seedcountry:(_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      return seederController.generateCountryData(args, ctx);
+    },
+
+
     blog: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return blogController.getBlog(args, ctx);
     },

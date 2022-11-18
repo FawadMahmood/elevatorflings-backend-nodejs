@@ -1,60 +1,63 @@
 scalar Date
 
-input Filters{
-  key:String
-  value:String
+input Filters {
+  key: String
+  value: String
 }
 
-type Query{
-  feeds(first:Int! cursor:String! distance:Float! filters:[Filters] interests:[ID]):FeedsPayload
+type Query {
+  feeds(
+    first: Int!
+    cursor: String!
+    distance: Float!
+    filters: [Filters]
+    interests: [ID]
+  ): FeedsPayload
 }
 
 type FeedsPayload {
-    error: Error
-    feeds: [Feed]
+  error: Error
+  feeds: [Feed]
 }
 
-type Feed{
-  _id:ID
-  name:String
-  interests:[Interest]
+type Feed {
+  _id: ID
+  name: String
+  interests: [Interest]
   location: Location
-  ref_user:UserFeed
-  ignored:Boolean
-  match:Boolean
-  gender:String
-  city:String
-  country:String
+  ref_user: UserFeed
+  ignored: Boolean
+  match: Boolean
+  gender: String
+  city: String
+  country: String
 }
-
 
 type UserFeed {
-  _id:ID!
+  _id: ID!
   email: String!
   username: String!
   name: String!
   photoUrl: String
   dob: Date!
-  address:String
+  address: String
 }
-
 
 type FeedPayload {
-    error: Error
-    feed: Feed
+  error: Error
+  feed: Feed
 }
 
-type Query{
-  feed(user_id:String! ref_id:String!):FeedPayload
+type Query {
+  feed(user_id: String!, ref_id: String!): FeedPayload
 }
 
-
-type Location{ 
-  coordinates:[Float]
+type Location {
+  coordinates: [Float]
 }
 
 type User {
-  _id:ID!
+  _id: ID!
   email: String!
   username: String!
   name: String!
@@ -62,22 +65,21 @@ type User {
   phone: Phone
   dob: Date!
   facebookId: String
-  city:String
-  country:String
+  city: String
+  country: String
   googleId: String
   appleId: String
   location: Location
-  provider: String,
+  provider: String
   password: String
-  accessToken:String
-  gender:Gender
-  completed:Boolean
-  step:Int
+  accessToken: String
+  gender: Gender
+  completed: Boolean
+  step: Int
 }
 
-
-type Query{
-  me:AddUserPayload
+type Query {
+  me: AddUserPayload
 }
 
 enum Gender {
@@ -86,10 +88,10 @@ enum Gender {
   NONE
 }
 
-type Phone{
-  _id:ID!
-  primary:Boolean
-  phone:String!
+type Phone {
+  _id: ID!
+  primary: Boolean
+  phone: String!
 }
 
 type Mutation {
@@ -97,74 +99,70 @@ type Mutation {
 }
 
 input InputLocation {
-  location:ILocation
-  country:String
-  city:String
+  location: ILocation
+  country: String
+  city: String
 }
 
 type GenericPayload {
-    error: Error
-    success: Boolean
+  error: Error
+  success: Boolean
 }
-
 
 type Mutation {
   setLocation(input: InputLocation!): GenericPayload
 }
 
-type Error{
-  message:String,
-  code:String,
+type Error {
+  message: String
+  code: String
 }
-
 
 type OtpPayloadResponse {
-    error: Error
-    otpResponse: Response
+  error: Error
+  otpResponse: Response
 }
 
-type Response{
-  message:String
-  code:String
-  name:String
-  email:String
+type Response {
+  message: String
+  code: String
+  name: String
+  email: String
 }
 
-type OtpResponse{
-  accessToken:String!
+type OtpResponse {
+  accessToken: String!
 }
 
 type Mutation {
-  requestOtp(email:String!): OtpPayloadResponse
+  requestOtp(email: String!): OtpPayloadResponse
 }
 
 type OtpVerificationPayload {
-    error: Error
-    otpResponse: OtpResponse
+  error: Error
+  otpResponse: OtpResponse
 }
 
 type Mutation {
-  verifyOtp(email:String! otp:String!): OtpVerificationPayload
+  verifyOtp(email: String!, otp: String!): OtpVerificationPayload
 }
 
 type AddUserPayload {
-    error: Error
-    user: User
+  error: Error
+  user: User
 }
 
 type Mutation {
   updateUser(id: String, input: InputUser!): AddUserPayload
 }
 
-input InputResetPassword{
-  password:String
-  confirm_password:String
+input InputResetPassword {
+  password: String
+  confirm_password: String
 }
 
-
-
 type Mutation {
-  resetPassword(input:InputResetPassword!): AddUserPayload
+  resetPassword(input: InputResetPassword!): AddUserPayload
 }
 
 input InputUser {
@@ -173,18 +171,17 @@ input InputUser {
   provider: String
   photoUrl: String
   username: String
-  phone:String
-  dob:Date!
-  location:ILocation
+  phone: String
+  dob: Date!
+  location: ILocation
   password: String
-  gender:String
+  gender: String
 }
 
-input ILocation{ 
-  type:String
-  coordinates:[Float]
+input ILocation {
+  type: String
+  coordinates: [Float]
 }
-
 
 type Comment {
   comment: String
@@ -215,7 +212,6 @@ type Query {
   blog(url: String!): Blog
 }
 
-
 type Mutation {
   addBlog(input: InputBlog!): Blog
 }
@@ -241,36 +237,34 @@ type Mutation {
 }
 
 type Mutation {
-  signIn(email: String! password:String!): AddUserPayload
+  signIn(email: String!, password: String!): AddUserPayload
 }
 
-type Query{
-  phone(id:ID!):Phone
+type Query {
+  phone(id: ID!): Phone
 }
 
-
-type Interest{
-  _id:ID!
-  title:String
-  addedBy:ID!
+type Interest {
+  _id: ID!
+  title: String
+  addedBy: ID!
 }
 
-type InterestsPayload{
-  interests:[Interest]
-  error:Error
+type InterestsPayload {
+  interests: [Interest]
+  error: Error
 }
 
-type Query{
-  interests:InterestsPayload
+type Query {
+  interests: InterestsPayload
 }
-
 
 input InputInterests {
-  interests:[String]
+  interests: [String]
 }
 
 type Mutation {
-  updateInterests(interests:[String]): GenericPayload
+  updateInterests(interests: [String]): GenericPayload
 }
 
 input InputBlog {
@@ -293,47 +287,45 @@ input InputComment {
   user: InputUser
 }
 
-
-
-
-
-type Status{
-  _id:ID!
-  name:String
-  imageUrl:String
+type Status {
+  _id: ID!
+  name: String
+  imageUrl: String
 }
 
-input InputStatus{
-  name:String
-  imageUrl:String
+input InputStatus {
+  name: String
+  imageUrl: String
 }
 
 type Mutation {
-  addStatus(status:InputStatus): GenericPayload
+  addStatus(status: InputStatus): GenericPayload
 }
 
-type StatusesPayload{
-  statuses:[Status]
-  error:Error
+type StatusesPayload {
+  statuses: [Status]
+  error: Error
 }
 
-type Query{
-  statuses:StatusesPayload
+type Query {
+  statuses: StatusesPayload
 }
 
-input ImagePayload{
-    imageUrl:String
-    primary:Boolean
+input ImagePayload {
+  imageUrl: String
+  primary: Boolean
 }
 
-input InputStepContinue{
-  step:Int
-  images:[ImagePayload]
-  status:String
+input InputStepContinue {
+  step: Int
+  images: [ImagePayload]
+  status: String
 }
 
 type Mutation {
-  completeStep(input:InputStepContinue): GenericPayload
+  completeStep(input: InputStepContinue): GenericPayload
 }
 
-
+type Query {
+  seedcountry: GenericPayload
+}

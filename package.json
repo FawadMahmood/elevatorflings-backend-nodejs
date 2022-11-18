@@ -36,6 +36,7 @@
     "@graphql-tools/stitch": "^8.7.23",
     "@graphql-tools/utils": "^8.12.0",
     "apollo-server-express": "^2.17.0",
+    "axios": "^1.1.3",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.19.0",
     "bull": "^4.10.1",

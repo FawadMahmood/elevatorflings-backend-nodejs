@@ -50,3 +50,21 @@ interface CompleteStatusType {
 interface Interest {
 
 }
+
+
+interface CountryType{
+    name:string;
+    phone_code:number;
+    short_name:string;
+    enable:boolean;
+}
+
+interface StateType{
+    name:string;
+    country_id:string;
+}
+
+interface CityType{
+    name:string;
+    state_id:string;
+}
