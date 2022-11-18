@@ -48,7 +48,7 @@ export class UsersController {
 
   @VerifyAuthorization
   async me(inputObject: any, ctx: Context) {
-    let userInfo = await Users.findById(ctx._id).populate('phone', '_id primary phone').populate('state').populate('country');;
+    let userInfo = await Users.findById(ctx._id).populate('phone', '_id primary phone').populate('state').populate('country');
     return { user: userInfo } as any;
   }
 

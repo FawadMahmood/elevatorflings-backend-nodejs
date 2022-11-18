@@ -6,14 +6,16 @@ const Feed: mongoose.Model<any> = require('../models/feed');
 const User: mongoose.Model<UserType> = require('../models/users');
 
 type FeedVariables = {
-    user_id: string;
-    ref_id: string;
+    userId: string;
+    refId: string;
 }
 
 export class FeedController {
     @VerifyAuthorization
     async getFeeds(args: any, ctx: Context) {
         const { first, cursor, distance, filters, interests } = args;
+        console.log("came to get feeds", args);
+
         const user = await User.findById(ctx._id);
 
 
@@ -72,7 +74,7 @@ export class FeedController {
         };
 
 
-        const feeds = await Feed.find(applied_filters).limit(first ? first : 5).populate('interests', '_id title addedBy').populate('ref_user');
+        const feeds = await Feed.find(applied_filters).limit(first ? first : 5).populate('interests', '_id title addedBy').populate('ref_user').populate('state').populate('country');;
 
 
         return {
@@ -83,7 +85,7 @@ export class FeedController {
     @VerifyAuthorization
     async getFeed(args: FeedVariables, ctx: Context) {
         console.log("get feed", args);
-        const feed = await Feed.findOne({ $and: [{ user: args.user_id }, { ref_user: args.ref_id }] }).populate('interests', '_id title addedBy').populate('ref_user')
+        const feed = await Feed.findOne({ $and: [{ user: args.userId }, { ref_user: args.refId }] }).populate('interests', '_id title addedBy').populate('ref_user').populate('state').populate('country');
         console.log("get feed", feed);
 
         return { feed } as any;
