@@ -351,3 +351,15 @@ type StatesPayload {
 type Query{
   getStatesByCountryCode(countryCode:String!):StatesPayload
 }
+
+
+input InputInterestAdmin{
+  title: String
+  imageUrl: String
+  addedBy: ID
+}
+
+
+type Mutation {
+  addInterest(input: InputInterestAdmin): GenericPayload
+}

@@ -7,6 +7,9 @@ const InterestSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        imageUrl: {
+            type: String,
+        },
         addedBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',

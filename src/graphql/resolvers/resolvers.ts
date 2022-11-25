@@ -112,6 +112,9 @@ const resolvers: IResolvers = {
     },
     completeStep: async (_: any, args: any, ctx: Context) => {
       return stepsController.completeStep(args, ctx);
+    },
+    addInterest: async (_: any, args: any, ctx: Context) => {
+      return interestsController.addInterestAdmin(args, ctx);
     }
   },
 };

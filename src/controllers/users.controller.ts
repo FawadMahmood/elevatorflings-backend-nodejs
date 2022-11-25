@@ -31,6 +31,8 @@ export class UsersController {
       const promises = await Promise.all([await userInfo.save(), _phone.save()]).then(() => console.log("adding user success"));
       return { user: { ...userInfo._doc, state, country, phone: _phone, accessToken: userInfo.generateToken() }, error: null } as any;
     } catch (error) {
+      console.log("error has been occured", error);
+
       return {
         error: {
           message: "User with same email already exist.",

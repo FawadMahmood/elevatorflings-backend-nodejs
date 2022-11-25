@@ -27,6 +27,21 @@ export class InterestsController {
     }
 
 
+    // @VerifyAuthorization
+    async addInterestAdmin(args: { input: { input: string; imageUrl: string; addedBy: string; } }, ctx: Context) {
+        const { input } = args;
+        const interest = new Interests(input);
+        await interest.save();
+
+        return {
+            error: null,
+            success: true,
+        } as any
+        // console.log('came to add interst', args);
+
+    }
+
+
     @VerifyAuthorization
     async setInterests(inputObject: any, ctx: Context) {
         const input = inputObject;
