@@ -23,7 +23,9 @@ export class UsersController {
       const state = await State.findById(input.state);
       const country = await Country.findById(state?.country_id);
 
-      const userInfo = new Users({ ...input, email: input.email.toLocaleLowerCase(), country: state?.country_id });
+      const image = input.gender === "MALE" ? 'https://avatarairlines.com/wp-content/uploads/2020/05/Male-placeholder.jpeg':"https://www.csncare.co.uk/wp-content/uploads/2020/05/Team-Member-FeMale-Placeholder.jpg"
+
+      const userInfo = new Users({ ...input, email: input.email.toLocaleLowerCase(), country: state?.country_id,photoUrl:image, });
       const _phone = new Phone({ phone: phone, primary: true, user: userInfo._id });
       userInfo.phone = _phone._id;
       const promises = await Promise.all([await userInfo.save(), _phone.save()]).then(() => console.log("adding user success"));
