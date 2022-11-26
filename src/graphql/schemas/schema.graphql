@@ -84,6 +84,7 @@ type User {
   gender: Gender
   completed: Boolean
   step: Int
+  buildingId: String
 }
 
 type Query {
