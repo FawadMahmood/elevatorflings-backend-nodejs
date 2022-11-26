@@ -1,4 +1,4 @@
-import Joi from 'Joi'
+import Joi from 'joi'
 
 const locationValidation = Joi.object({
     type: Joi.string().valid('Point'),

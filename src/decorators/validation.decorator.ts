@@ -1,6 +1,6 @@
 import { ApolloError } from "apollo-server-express";
 import { validations } from "../validations";
-import Joi from 'Joi'
+import Joi from 'joi'
 import { ErrorConstants } from "../constants/errors.constants";
 
 
