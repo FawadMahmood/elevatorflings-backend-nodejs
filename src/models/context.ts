@@ -9,6 +9,6 @@ export interface Context {
     add: (props: { _id: string, new: boolean }) => void;
   };
   update: {
-    add: (props: { _id: string, key: string, value: object }) => void;
+    add: (props: { _id: string, key: string, value: any }) => void;
   };
 }

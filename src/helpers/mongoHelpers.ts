@@ -76,6 +76,7 @@ feedsQueue.process(async function (job, done) {
           status: user_ref.status,
           state: user_ref.state,
           country: user_ref.country,
+          buildingId:user_ref.buildingId
         });
         feed.save();
       }
@@ -108,6 +109,7 @@ feedsQueue.process(async function (job, done) {
           status: user.status,
           state: user.state,
           country: user.country,
+          buildingId:user.buildingId
         });
         feed.save();
       }

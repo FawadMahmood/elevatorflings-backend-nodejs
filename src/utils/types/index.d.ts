@@ -29,6 +29,7 @@ export interface UserType {
     status: "RELATIONSHIP" | "FRIENDSHIP" | "FLINGS" | "NETWORKING";
     _doc: UserType
     state: string
+    buildingId:string;
 }
 
 export interface StatusType {

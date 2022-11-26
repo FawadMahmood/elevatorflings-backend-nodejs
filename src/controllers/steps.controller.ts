@@ -64,6 +64,12 @@ export class StepsController {
             console.log("user building set and profile completed.");
         });
 
+        ctx.update.add({
+            _id:ctx._id as string,
+            key:"buildingId",
+            value:input.buildingId
+        });
+
         return {
             success: true,
         } as any
