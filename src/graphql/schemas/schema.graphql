@@ -255,6 +255,7 @@ type Interest {
   _id: ID!
   title: String
   addedBy: ID!
+  imageUrl:String
 }
 
 type InterestsPayload {
