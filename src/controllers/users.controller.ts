@@ -2,12 +2,10 @@ import { ApolloError } from 'apollo-server-express';
 import { Error, Model } from 'mongoose';
 import { errors } from '../errors';
 import { Context } from '../models/context';
-import Joi from 'Joi'
 // @ts-ignore
 import otpGenerator from 'otp-generator'
 import { VerifyAuthorization } from '../decorators/auth.decorator';
 import { ValidateUserInput } from '../decorators/validation.decorator';
-import Queue from 'bull';
 import { CountryType, StateType } from '../utils/types';
 
 
