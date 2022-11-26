@@ -359,6 +359,15 @@ input InputInterestAdmin{
   addedBy: ID
 }
 
+input CompleteProfile{
+  buildingId: String
+}
+
+
+type Mutation{
+  completeProfile(input: CompleteProfile):GenericPayload
+}
+
 
 type Mutation {
   addInterest(input: InputInterestAdmin): GenericPayload

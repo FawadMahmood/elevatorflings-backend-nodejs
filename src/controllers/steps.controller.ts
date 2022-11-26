@@ -1,7 +1,7 @@
 import mongoose = require('mongoose');
 import { VerifyAuthorization } from '../decorators/auth.decorator';
 import { Context } from '../models/context';
-import { CompleteStatusType, StatusType, UserType } from '../utils/types';
+import { CompleteProfile, CompleteStatusType, StatusType, UserType } from '../utils/types';
 
 const Status: mongoose.Model<StatusType> = require('../models/status');
 const Image: mongoose.Model<StatusType> = require('../models/image');
@@ -49,6 +49,23 @@ export class StepsController {
                     success: false
                 } as any
         }
+    }
 
+    @VerifyAuthorization
+    async completeProfile(args: { input: CompleteProfile }, ctx: Context) {
+        const { input } = args;
+
+        User.findOneAndUpdate({ _id: ctx._id }, {
+            $set: {
+                buildingId:input.buildingId,
+                completed:true,
+            }
+        }).then(response => {
+            console.log("user building set and profile completed.");
+        });
+
+        return {
+            success: true,
+        } as any
     }
 }

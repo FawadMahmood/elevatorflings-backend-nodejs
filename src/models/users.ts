@@ -109,6 +109,9 @@ const UserSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Country',
     },
+    buildingId:{
+      type: String
+    }
   },
   {
     timestamps: true,

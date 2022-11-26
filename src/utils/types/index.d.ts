@@ -48,6 +48,10 @@ interface CompleteStatusType {
     status: string;
 }
 
+interface CompleteProfile {
+    buildingId: number;
+}
+
 interface Interest {
 
 }

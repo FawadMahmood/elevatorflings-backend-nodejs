@@ -115,6 +115,9 @@ const resolvers: IResolvers = {
     },
     addInterest: async (_: any, args: any, ctx: Context) => {
       return interestsController.addInterestAdmin(args, ctx);
+    },
+    completeProfile: async (_: any, args: any, ctx: Context) => {
+      return stepsController.completeProfile(args, ctx);
     }
   },
 };
