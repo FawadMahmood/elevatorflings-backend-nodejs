@@ -11,6 +11,9 @@ export class EventController {
     @VerifyAuthorization
     async addEvent(args: { input: EventTypeInput }, ctx: Context) {
         const { input } = args;
+
+        console.log("event came to add", input);
+        
         
     }
 
