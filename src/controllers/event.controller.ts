@@ -12,7 +12,10 @@ export class EventController {
     async addEvent(args: { input: EventTypeInput }, ctx: Context) {
         const { input } = args;
 
-        console.log("event came to add", input);
+        const event = new Event({...input,createdBy:ctx._id});
+
+
+        console.log("event came to add", event);
         
         
     }

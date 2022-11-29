@@ -385,7 +385,6 @@ input InputCreateEvent {
   interests: [String]
   start_date: Date
   end_date: Date
-  createdBy: String
   photoUrl: String
   photos: [String]
   location: ILocation!

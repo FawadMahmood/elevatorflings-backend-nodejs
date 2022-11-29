@@ -32,7 +32,8 @@ const EventScheema = new mongoose.Schema(
             type: String
         },
         status: {
-            type: String
+            type: String,
+            default:"AVAILABLE",
         },
         interests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' }],
         start_date:{
@@ -44,6 +45,7 @@ const EventScheema = new mongoose.Schema(
         createdBy:{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
+            required:true,
         },
         photoUrl: {
             type: String,
