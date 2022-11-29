@@ -32,6 +32,26 @@ export interface UserType {
     buildingId:string;
 }
 
+export interface EventType{
+    name:string,
+    description:string,
+    state:string,
+    country:string,
+    buildingId:string,
+    status:"COMPLETED" | "AVAILABLE" | "CLOSED" | "CANCELLED",
+    interests: Interest[],
+    start_date:Date,
+    end_date:Date,
+    createdBy:UserType,
+    photoUrl:string;
+    photos:string[],
+    location: {
+        type: "Point",
+        coordinates: [number, number]
+    },
+    available:boolean;
+}
+
 export interface StatusType {
     name: string;
     imageUrl: string;
