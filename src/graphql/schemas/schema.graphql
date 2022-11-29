@@ -374,3 +374,24 @@ type Mutation{
 type Mutation {
   addInterest(input: InputInterestAdmin): GenericPayload
 }
+
+input InputCreateEvent {
+  name: String
+  description: String
+  state: String
+  country: String
+  buildingId: String
+  status: String
+  interests: [String]
+  start_date: Date
+  end_date: Date
+  createdBy: String
+  photoUrl: String
+  photos: [String]
+  location: ILocation!
+}
+
+
+type Mutation {
+  addEvent(input: InputCreateEvent): GenericPayload
+}

@@ -11,6 +11,8 @@ import { StatusController } from '../../controllers/status.controller';
 import { StepsController } from '../../controllers/steps.controller';
 import { SeederController } from '../../controllers/seeder.controller';
 import { LocalizationController } from '../../controllers/localization.controller';
+import { EventController } from '../../controllers/event.controller';
+
 
 
 const blogController = new BlogsController();
@@ -22,6 +24,8 @@ const statusController = new StatusController();
 const stepsController = new StepsController();
 const seederController = new SeederController();
 const localizationController = new LocalizationController();
+const eventController = new EventController();
+
 
 
 
@@ -118,6 +122,9 @@ const resolvers: IResolvers = {
     },
     completeProfile: async (_: any, args: any, ctx: Context) => {
       return stepsController.completeProfile(args, ctx);
+    },
+    addEvent: async (_: any, args: any, ctx: Context) => {
+      return eventController.addEvent(args, ctx);
     }
   },
 };

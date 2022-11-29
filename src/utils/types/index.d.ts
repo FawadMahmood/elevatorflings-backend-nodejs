@@ -52,6 +52,26 @@ export interface EventType{
     available:boolean;
 }
 
+export interface EventTypeInput{
+    name:string,
+    description:string,
+    state:string,
+    country:string,
+    buildingId:string,
+    status:"COMPLETED" | "AVAILABLE" | "CLOSED" | "CANCELLED",
+    interests: string[],
+    start_date:Date,
+    end_date:Date,
+    createdBy:string,
+    photoUrl:string;
+    photos:string[],
+    location: {
+        type: "Point",
+        coordinates: [number, number]
+    },
+    available:boolean;
+}
+
 export interface StatusType {
     name: string;
     imageUrl: string;
