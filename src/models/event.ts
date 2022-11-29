@@ -54,6 +54,9 @@ const EventScheema = new mongoose.Schema(
         location: {
             type: pointSchema,
         },
+        address:{
+            type:String,
+        },
         available:{
             type:Boolean,
             default:true,

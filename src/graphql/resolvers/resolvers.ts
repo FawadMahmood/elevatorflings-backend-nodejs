@@ -65,6 +65,11 @@ const resolvers: IResolvers = {
 
     getStatesByCountryCode: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return localizationController.getStatesByCountryCode(args, ctx);
+    },
+    getEvent: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      console.log("get event", args);
+      
+      return eventController.getEventInfo(args, ctx);
     }
   },
 

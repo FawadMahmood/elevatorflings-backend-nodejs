@@ -11,77 +11,35 @@ export class EventController {
     @VerifyAuthorization
     async addEvent(args: { input: EventTypeInput }, ctx: Context) {
         const { input } = args;
-
         const event = new Event({...input,createdBy:ctx._id});
-
-
-        console.log("event came to add", event);
-        
-        
+        await event.save();
+        return {
+            success: true,
+            resource_id:event._id,
+        } as any
     }
 
-    // @VerifyAuthorization
-    // async completeStep(args: { input: CompleteStatusType }, ctx: Context) {
-    //     const { input } = args;
-    //     console.log("came to process step", input);
-
-    //     switch (input.step) {
-    //         case 1:
-    //             let primateImage: any;
-    //             input.images.map((_, i) => {
-    //                 const image = new Image({ ..._, user: ctx._id });
-    //                 image.save();
-    //                 if (_.primary) {
-    //                     primateImage = image;
-    //                 }
-    //             });
-
-    //             User.findOneAndUpdate({ _id: ctx._id }, {
-    //                 $set: {
-    //                     photoUrl: primateImage.imageUrl,
-    //                     status: input.status,
-    //                     step: 2,
-    //                 }
-    //             }).then(response => {
-    //                 console.log("image default updated, user status updated, step no updated.");
-    //             });
-
-    //             return {
-    //                 success: true,
-    //             } as any
-    //             break;
-    //         default:
-    //             return {
-    //                 error: {
-    //                     code: "UNKNOWN STEP",
-    //                     message: "Step # is required"
-    //                 },
-    //                 success: false
-    //             } as any
-    //     }
-    // }
 
     // @VerifyAuthorization
-    // async completeProfile(args: { input: CompleteProfile }, ctx: Context) {
-    //     const { input } = args;
+    async getEventInfo(args: { id:string }, ctx: Context) {
+        console.log("event found",args );
+        const event = await Event.findOne({_id:args.id}).populate('interests').populate('state').populate('country').populate('createdBy');
+        console.log("event found", event);
+        
+        if(event){
+            return{
+                event
+            } as any;
+        }else{
+            return {
+                error: {
+                    code: "NO_EVENT_FOUND",
+                    message: "Unable to find event."
+                },
+                success: false
+            } as any
+        }
 
-    //     User.findOneAndUpdate({ _id: ctx._id }, {
-    //         $set: {
-    //             buildingId:input.buildingId,
-    //             completed:true,
-    //         }
-    //     }).then(response => {
-    //         console.log("user building set and profile completed.");
-    //     });
 
-    //     ctx.update.add({
-    //         _id:ctx._id as string,
-    //         key:"buildingId",
-    //         value:input.buildingId
-    //     });
-
-    //     return {
-    //         success: true,
-    //     } as any
-    // }
+    }
 }

@@ -38,7 +38,7 @@ export interface EventType{
     state:string,
     country:string,
     buildingId:string,
-    status:"COMPLETED" | "AVAILABLE" | "CLOSED" | "CANCELLED",
+    status:"COMPLETED" | "AVAILABLE" | "CLOSED" | "CANCELLED" | "ONGOING",
     interests: Interest[],
     start_date:Date,
     end_date:Date,

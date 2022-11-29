@@ -114,6 +114,7 @@ input InputLocation {
 type GenericPayload {
   error: Error
   success: Boolean
+  resource_id: String
 }
 
 type Mutation {
@@ -388,9 +389,43 @@ input InputCreateEvent {
   photoUrl: String
   photos: [String]
   location: ILocation!
+  address: String
 }
 
 
 type Mutation {
   addEvent(input: InputCreateEvent): GenericPayload
+}
+
+type CreatedBy{
+  _id: ID
+  name: String
+  photoUrl: String
+}
+
+type EventPayload{
+    name: String
+    description: String
+    state: State
+    country: Country
+    buildingId: String
+    status: String
+    interests: [Interest]
+    start_date: Date
+    end_date: Date
+    photoUrl: String
+    photos: [String]
+    location: Location
+    createdBy:CreatedBy
+    available: Boolean
+    address: String
+}
+
+type EventPayloadGeneric{
+   event:EventPayload,
+   error: Error
+}
+
+type Query{
+  getEvent(id:String!):EventPayloadGeneric
 }
