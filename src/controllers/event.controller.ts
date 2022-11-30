@@ -1,7 +1,7 @@
 import mongoose = require('mongoose');
 import { VerifyAuthorization } from '../decorators/auth.decorator';
 import { Context } from '../models/context';
-import {  EventType,EventTypeInput } from '../utils/types';
+import {  EventType,EventTypeInput, GetEventsVariables } from '../utils/types';
 
 
 const Event: mongoose.Model<EventType> = require('../models/event');
@@ -20,11 +20,9 @@ export class EventController {
     }
 
 
-    // @VerifyAuthorization
+    @VerifyAuthorization
     async getEventInfo(args: { id:string }, ctx: Context) {
-        console.log("event found",args );
         const event = await Event.findOne({_id:args.id}).populate('interests').populate('state').populate('country').populate('createdBy');
-        console.log("event found", event);
         
         if(event){
             return{
@@ -39,7 +37,47 @@ export class EventController {
                 success: false
             } as any
         }
+    }
 
+    @VerifyAuthorization
+    async getEvents(args:{input:GetEventsVariables}, ctx: Context){
+        console.log("events asked", args);
+        
+        const {input} = args;
+
+        let conditions: any[] = [
+            {
+                location: {
+                    $near:
+                    {
+                        $geometry: {
+                            type:'Point',
+                            coordinates:[input.location.longitude,input.location.latitude]
+                        },
+                        $minDistance: 0,
+                        $maxDistance:500
+                    }
+                }
+            },
+            {
+                available:true
+            },
+        ];
+
+        let applied_filters = {
+            $and: [
+                ...conditions,
+            ]
+        };
+
+        const events = await Event.find(applied_filters).populate('interests').populate('state').populate('country').populate('createdBy');
+        console.log("events rec", events);
+        
+
+        return {
+            events: events
+        } as any;
 
     }
+
 }

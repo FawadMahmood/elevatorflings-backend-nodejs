@@ -404,6 +404,7 @@ type CreatedBy{
 }
 
 type EventPayload{
+    _id:ID!
     name: String
     description: String
     state: State
@@ -422,10 +423,28 @@ type EventPayload{
 }
 
 type EventPayloadGeneric{
-   event:EventPayload,
+   event:EventPayload
    error: Error
+}
+
+type EventstPayloadGeneric{
+   events:[EventPayload]
+   error: Error
+}
+
+
+input Coordinates{
+    longitude: Float
+    latitude: Float
+}
+
+
+input GetEventsVariables{
+    location:Coordinates
+    cursor: String
 }
 
 type Query{
   getEvent(id:String!):EventPayloadGeneric
+  getEvents(input:GetEventsVariables!):EventstPayloadGeneric
 }

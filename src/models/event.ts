@@ -49,6 +49,7 @@ const EventScheema = new mongoose.Schema(
         },
         photoUrl: {
             type: String,
+            required:true
         },
         photos: [{ type: String}],
         location: {

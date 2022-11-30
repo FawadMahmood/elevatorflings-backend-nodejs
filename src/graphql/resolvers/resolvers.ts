@@ -70,6 +70,9 @@ const resolvers: IResolvers = {
       console.log("get event", args);
       
       return eventController.getEventInfo(args, ctx);
+    },
+    getEvents: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      return eventController.getEvents(args, ctx);
     }
   },
 

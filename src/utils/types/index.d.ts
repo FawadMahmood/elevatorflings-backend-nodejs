@@ -114,3 +114,14 @@ interface CityType {
     name: string;
     state_id: string;
 }
+
+
+type Coordinates = {
+    longitude: Number;
+    latitude: Number;
+};
+
+export interface GetEventsVariables{
+    location:Coordinates;
+    cursor?:string
+}
