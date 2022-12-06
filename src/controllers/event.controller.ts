@@ -39,6 +39,8 @@ export class EventController {
         }
     }
 
+
+
     @VerifyAuthorization
     async getEvents(args:{input:GetEventsVariables}, ctx: Context){
         console.log("events asked", args);
@@ -46,23 +48,45 @@ export class EventController {
         const {input} = args;
 
         let conditions: any[] = [
-            {
-                location: {
-                    $near:
-                    {
-                        $geometry: {
-                            type:'Point',
-                            coordinates:[input.location.longitude,input.location.latitude]
-                        },
-                        $minDistance: 0,
-                        $maxDistance:500
-                    }
-                }
-            },
-            {
-                available:true
-            },
+           
         ];
+
+
+        input.filters?.map((_,i)=>{
+            conditions.push({
+                [_.key]:_.value
+            });
+        });
+
+        if(input.after){
+            conditions.push({
+                _id: { $gt: new mongoose.Types.ObjectId(input.after) }
+            });
+        }
+
+        if(input.limit){
+            conditions.push({
+                $limit:input.limit,
+            });
+        }
+
+        if(input.location){
+            conditions.push(
+                {
+                    location: {
+                        $near:
+                        {
+                            $geometry: {
+                                type:'Point',
+                                coordinates:[input.location?.longitude,input.location?.latitude]
+                            },
+                            $minDistance: 0,
+                            $maxDistance:500
+                        }
+                    }
+                },
+            );
+        }
 
         let applied_filters = {
             $and: [

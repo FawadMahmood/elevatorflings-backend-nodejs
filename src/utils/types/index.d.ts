@@ -121,7 +121,16 @@ type Coordinates = {
     latitude: Number;
 };
 
+type Filter={
+    key:string;
+    value:any;
+}
+
 export interface GetEventsVariables{
-    location:Coordinates;
+    location?:Coordinates;
     cursor?:string
+    limit?:number;
+    after?:string;
+    filters?:Filter[]
+    sortBy?:string[]
 }

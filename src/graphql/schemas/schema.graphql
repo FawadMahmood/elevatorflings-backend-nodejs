@@ -438,10 +438,18 @@ input Coordinates{
     latitude: Float
 }
 
+input FilterEvent{
+  key:String
+  value: Boolean
+}
 
 input GetEventsVariables{
     location:Coordinates
     cursor: String
+    limit: Int
+    after: String
+    filters: [FilterEvent]
+    sortBy:[String]
 }
 
 type Query{
