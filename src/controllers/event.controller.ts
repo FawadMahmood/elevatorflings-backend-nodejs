@@ -70,22 +70,36 @@ export class EventController {
             });
         }
 
+       
+
         if(input.location){
-            conditions.push(
-                {
-                    location: {
-                        $near:
-                        {
-                            $geometry: {
-                                type:'Point',
-                                coordinates:[input.location?.longitude,input.location?.latitude]
-                            },
-                            $minDistance: 0,
-                            $maxDistance:500
+            if(input.sortBy && input.sortBy.includes('location')){
+
+            }else{
+                conditions.push(
+                    {
+                        location: {
+                            $near:
+                            {
+                                $geometry: {
+                                    type:'Point',
+                                    coordinates:[input.location?.longitude,input.location?.latitude]
+                                },
+                                $minDistance: 0,
+                                $maxDistance:500
+                            }
                         }
-                    }
-                },
-            );
+                    },
+                );
+            }
+            
+        }
+
+
+        if(input.sortBy && input.sortBy.includes('location')){
+            conditions.push({
+                "$sort":{location:-1}
+            })
         }
 
         let applied_filters = {
