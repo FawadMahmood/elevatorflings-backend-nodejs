@@ -450,6 +450,7 @@ input GetEventsVariables{
     after: String
     filters: [FilterEvent]
     sortBy:[String]
+    skip: Int
 }
 
 type Query{

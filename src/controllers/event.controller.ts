@@ -43,14 +43,11 @@ export class EventController {
 
     @VerifyAuthorization
     async getEvents(args:{input:GetEventsVariables}, ctx: Context){
-        console.log("events asked", args);
-        
         const {input} = args;
 
         let conditions: any[] = [
            
         ];
-
 
         input.filters?.map((_,i)=>{
             conditions.push({
@@ -63,10 +60,6 @@ export class EventController {
                 _id: { $gt: new mongoose.Types.ObjectId(input.after) }
             });
         }
-
-    
-
-       
 
         if(input.location){
             if(input.sortBy && input.sortBy.includes('location')){
@@ -106,6 +99,12 @@ export class EventController {
         }
 
 
+        if(input.cursor){
+            conditions.push({
+                _id: { $gt: new mongoose.Types.ObjectId(input.cursor) }
+            });
+        }
+
       
 
         let applied_filters = {
@@ -113,25 +112,18 @@ export class EventController {
                 ...conditions,
             ]
         };
-
+        
         let query = Event.find(applied_filters).populate('interests').populate('state').populate('country').populate('createdBy'); //.catch(error=> console.log("error occured", error));
         
         if(input.limit){
             query = query.limit(input.limit);
         }
 
-
-        if(input.sortBy && input.sortBy.includes('location')){
-            query = query.sort({
-                location:-1
-            });
+        if(input.skip){
+            query = query.skip(input.skip);
         }
 
-        const events =await  query.exec().catch(err=>console.log("error occured", err));
-        const count = await Event.count(applied_filters).catch(err=>console.log("error occured", err));
-
-        console.log("events rec", events,count);
-        
+        const events =await  query.exec().catch(err=>console.log("error occured", err)); 
 
         return {
             events: events

@@ -132,5 +132,6 @@ export interface GetEventsVariables{
     limit?:number;
     after?:string;
     filters?:Filter[]
-    sortBy?:string[]
+    sortBy?:string[];
+    skip?:number;
 }
