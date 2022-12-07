@@ -122,7 +122,7 @@ export class EventController {
         if(input.skip){
             query = query.skip(input.skip);
         }
-
+        
         const events =await  query.exec().catch(err=>console.log("error occured", err)); 
 
         return {
