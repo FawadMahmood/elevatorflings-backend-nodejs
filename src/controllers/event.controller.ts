@@ -64,17 +64,27 @@ export class EventController {
             });
         }
 
-        if(input.limit){
-            conditions.push({
-                $limit:input.limit,
-            });
-        }
+    
 
        
 
         if(input.location){
             if(input.sortBy && input.sortBy.includes('location')){
-
+                conditions.push(
+                    {
+                        location: {
+                            $near:
+                            {
+                                $geometry: {
+                                    type:'Point',
+                                    coordinates:[input.location?.longitude,input.location?.latitude]
+                                },
+                                $minDistance: 0,
+                                $maxDistance:100000
+                            }
+                        }
+                    },
+                );
             }else{
                 conditions.push(
                     {
@@ -96,11 +106,7 @@ export class EventController {
         }
 
 
-        if(input.sortBy && input.sortBy.includes('location')){
-            conditions.push({
-                "$sort":{location:-1}
-            })
-        }
+      
 
         let applied_filters = {
             $and: [
@@ -108,8 +114,23 @@ export class EventController {
             ]
         };
 
-        const events = await Event.find(applied_filters).populate('interests').populate('state').populate('country').populate('createdBy');
-        console.log("events rec", events);
+        let query = Event.find(applied_filters).populate('interests').populate('state').populate('country').populate('createdBy'); //.catch(error=> console.log("error occured", error));
+        
+        if(input.limit){
+            query = query.limit(input.limit);
+        }
+
+
+        if(input.sortBy && input.sortBy.includes('location')){
+            query = query.sort({
+                location:-1
+            });
+        }
+
+        const events =await  query.exec().catch(err=>console.log("error occured", err));
+        const count = await Event.count(applied_filters).catch(err=>console.log("error occured", err));
+
+        console.log("events rec", events,count);
         
 
         return {
