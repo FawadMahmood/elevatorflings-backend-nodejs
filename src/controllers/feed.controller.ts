@@ -74,7 +74,7 @@ export class FeedController {
         };
 
 
-        const feeds = await Feed.find(applied_filters).limit(first ? first : 5).populate('interests', '_id title addedBy').populate('ref_user').populate('state').populate('country');;
+        const feeds = await Feed.find(applied_filters).limit(first || 5).populate('interests', '_id title addedBy').populate('ref_user').populate('state').populate('country').sort({_id:1});
 
 
         return {
@@ -84,11 +84,7 @@ export class FeedController {
 
     @VerifyAuthorization
     async getFeed(args: FeedVariables, ctx: Context) {
-        console.log("get feed", args);
         const feed = await Feed.findOne({ $and: [{ user: args.userId }, { ref_user: args.refId }] }).populate('interests', '_id title addedBy').populate('ref_user').populate('state').populate('country');
-        console.log("get feed", feed);
-
         return { feed } as any;
-
     }
 }
