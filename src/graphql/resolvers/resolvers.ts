@@ -53,6 +53,9 @@ const resolvers: IResolvers = {
       console.log("user info");
       return usersController.me(args, ctx);
     },
+    getUser:(_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      return usersController.getUser(args, ctx);
+    },
     feeds: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return feedController.getFeeds(args, ctx);
     },

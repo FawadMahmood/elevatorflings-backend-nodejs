@@ -13,6 +13,8 @@ const Users: Model<any> = require('../models/users');
 const Phone: Model<any> = require('../models/phone');
 const State: Model<StateType> = require('../models/state');
 const Country: Model<CountryType> = require('../models/country');
+const ImageMod: Model<CountryType> = require('../models/image');
+
 
 
 export class UsersController {
@@ -43,6 +45,14 @@ export class UsersController {
     }
   }
 
+
+  @ValidateUserInput
+  async getUser(inputObject: {userId:string}, ctx: Context) {
+    let userInfo = await Users.findById(inputObject.userId).populate('phone', '_id primary phone').populate('state').populate('country');
+    let photos = await ImageMod.find({user:inputObject.userId});
+    return { user: {...userInfo._doc,photos} } as any;
+  }
+
   async updateUser(inputObject: any, ctx: Context) {
     const userInfo = await Users.findOneAndUpdate({ _id: inputObject.id }, inputObject.input, { new: true });
     return userInfo;
@@ -51,7 +61,8 @@ export class UsersController {
   @VerifyAuthorization
   async me(inputObject: any, ctx: Context) {
     let userInfo = await Users.findById(ctx._id).populate('phone', '_id primary phone').populate('state').populate('country');
-    return { user: userInfo } as any;
+    
+    return { user:userInfo } as any;
   }
 
   @VerifyAuthorization
@@ -238,4 +249,6 @@ export class UsersController {
       }
     }
   }
+
+
 }

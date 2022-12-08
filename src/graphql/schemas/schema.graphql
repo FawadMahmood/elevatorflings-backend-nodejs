@@ -64,6 +64,12 @@ type Country{
   enable:Boolean
 }
 
+
+type UserPhotos{
+  imageUrl:String
+  primary: Boolean
+}
+
 type User {
   _id: ID!
   email: String!
@@ -85,10 +91,12 @@ type User {
   completed: Boolean
   step: Int
   buildingId: String
+  photos:[UserPhotos]
 }
 
 type Query {
   me: AddUserPayload
+  getUser(userId:String!):AddUserPayload
 }
 
 enum Gender {
