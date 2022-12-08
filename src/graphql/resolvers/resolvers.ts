@@ -12,6 +12,8 @@ import { StepsController } from '../../controllers/steps.controller';
 import { SeederController } from '../../controllers/seeder.controller';
 import { LocalizationController } from '../../controllers/localization.controller';
 import { EventController } from '../../controllers/event.controller';
+import { SocketController } from '../../controllers/socket.controller';
+
 
 
 
@@ -25,17 +27,8 @@ const stepsController = new StepsController();
 const seederController = new SeederController();
 const localizationController = new LocalizationController();
 const eventController = new EventController();
+const socketController = new SocketController();
 
-
-
-import { RedisPubSub } from 'graphql-redis-subscriptions';
-const pubsub = new RedisPubSub({
-  connection:{
-    port: 6379, 
-    host: '127.0.0.1', 
-    password: ''
-  }
-});
 
 
 const resolvers: IResolvers = {
@@ -145,9 +138,8 @@ const resolvers: IResolvers = {
 
   Subscription:{
     userEvent:{
-      subscribe: (_, args) => {
-        console.log(args);
-        return pubsub.asyncIterator(`${'USER_EVENT'}.${args.userId}`)
+      subscribe: (_, args,ctx:Context) => {
+        return socketController.registerSocket(args,ctx) //
       },
     }
   }

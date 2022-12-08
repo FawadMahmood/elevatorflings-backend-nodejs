@@ -15,6 +15,7 @@ import depthLimit from 'graphql-depth-limit';
 import { Server } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 
+
 interface MyContext {
   token?: String;
 }
