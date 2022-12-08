@@ -28,7 +28,14 @@ const eventController = new EventController();
 
 
 
-
+import { RedisPubSub } from 'graphql-redis-subscriptions';
+const pubsub = new RedisPubSub({
+  connection:{
+    port: 6379, 
+    host: '127.0.0.1', 
+    password: ''
+  }
+});
 
 
 const resolvers: IResolvers = {
@@ -135,6 +142,15 @@ const resolvers: IResolvers = {
       return eventController.addEvent(args, ctx);
     }
   },
+
+  Subscription:{
+    userEvent:{
+      subscribe: (_, args) => {
+        console.log(args);
+        return pubsub.asyncIterator(`${'USER_EVENT'}.${args.userId}`)
+      },
+    }
+  }
 };
 
 export default resolvers;

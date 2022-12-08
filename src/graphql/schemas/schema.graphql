@@ -457,3 +457,34 @@ type Query{
   getEvent(id:String!):EventPayloadGeneric
   getEvents(input:GetEventsVariables!):EventstPayloadGeneric
 }
+
+
+
+
+type UserEventExtraData{
+    resource_name:String
+    message:String
+    meta:String
+}
+
+type UserEventPayload{
+    from:ID
+    resource_id:ID
+    extraData:UserEventExtraData
+}
+
+enum UserEventTypes {
+  MESSAGE
+  GROUP_MESSAGE
+  KNOCK
+}
+
+type UserEvent{
+    type:UserEventTypes
+    payload:UserEventPayload
+}
+
+
+type Subscription {
+  userEvent(userId: ID!): UserEvent
+}
