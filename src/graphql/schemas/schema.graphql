@@ -518,6 +518,7 @@ type Attachment{
 }
 
 type Thread{
+  _id:ID
   conversation:ID
   sender:User
   unique_id: String
@@ -534,7 +535,7 @@ type MessagesPayload{
 }
 
 type Query{
-  getChats(userId:String!):MessagesPayload
+  getChats(userId:String! cursor:String):MessagesPayload
 }
 
 input AttachmentInput{

@@ -15,11 +15,24 @@ const socketController = new SocketController();
 
 export class ChatController {
     @VerifyAuthorization
-    async getChats(args: { userId: string; }, ctx: Context) {
+    async getChats(args: { userId: string;cursor:string; }, ctx: Context) {
         const {userId} = args;
         const chat = await Chat.findOne({$and:[{user:ctx._id},{ref_user:userId}]});
         if(chat){
-            const threads =await Thread.find({$and:[{conversation:chat.conversation},{user:ctx._id}]}).limit(10).populate('sender','_id name photoUrl').populate('reactions.user','_id name photoUrl');
+
+            let queries:any = [
+                {conversation:chat.conversation},
+                {user:ctx._id},
+
+            ];
+
+            if(args.cursor){
+                queries.push({
+                        _id: { $lt: new mongoose.Types.ObjectId(args.cursor) }
+                })
+            }
+
+            const threads =await Thread.find({$and:queries}).limit(10).populate('sender','_id name photoUrl').populate('reactions.user','_id name photoUrl').sort({createdAt:-1});
 
             return{
                 chats:threads,
