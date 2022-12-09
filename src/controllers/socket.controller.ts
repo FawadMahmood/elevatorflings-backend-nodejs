@@ -32,6 +32,7 @@ export class SocketController {
                 extraData:{
                     resource_name:user?.name,
                     message:thread.message,
+                    createdAt:thread.createdAt
                 },
                 attachments:thread.attachments
               },

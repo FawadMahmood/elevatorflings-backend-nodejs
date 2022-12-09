@@ -474,6 +474,7 @@ type UserEventExtraData{
     resource_name:String
     message:String
     meta:String
+    createdAt:Date
 }
 
 type UserEventPayload{
