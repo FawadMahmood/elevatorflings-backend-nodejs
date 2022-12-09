@@ -480,6 +480,7 @@ type UserEventPayload{
     from:ID
     resource_id:ID
     extraData:UserEventExtraData
+    attachments:[Attachment]
 }
 
 enum UserEventTypes {
@@ -496,4 +497,60 @@ type UserEvent{
 
 type Subscription {
   userEvent(userId: ID!): UserEvent
+}
+
+
+
+enum AttachmentType {
+  Image
+  Video
+}
+
+type Reaction{
+  type: String
+  user:User
+}
+
+type Attachment{
+    type:AttachmentType
+    path: String
+}
+
+type Thread{
+  conversation:ID
+  sender:User
+  unique_id: String
+  message: String
+  attachments:[Attachment]
+  reactions:[Reaction]
+  createdAt: Date
+  updatedAt: Date
+}
+
+type MessagesPayload{
+  chats:[Thread]
+  conversation_id: ID
+}
+
+type Query{
+  getChats(userId:String!):MessagesPayload
+}
+
+input AttachmentInput{
+    type:AttachmentType
+    path: String
+}
+
+input MessageInputPayload{
+  message: String
+  attachments:[AttachmentInput]
+}
+
+input SendMessagePayload{
+  userId:String
+  payload:MessageInputPayload
+}
+
+type Mutation{
+  sendMessage(input:SendMessagePayload):Thread
 }

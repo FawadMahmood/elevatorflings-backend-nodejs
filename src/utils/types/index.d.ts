@@ -30,6 +30,7 @@ export interface UserType {
     _doc: UserType
     state: string
     buildingId:string;
+    password:string;
 }
 
 export interface EventType{

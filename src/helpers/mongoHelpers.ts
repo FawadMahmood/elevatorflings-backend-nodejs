@@ -153,7 +153,7 @@ export class MongoHelper {
         const id = payload._id;
         return await User.findById(id).then((response: any) => {
           if (response) {
-            return { isUserLogged: true, _id: response._id, email: response.email, queue: feedsQueue, update: updateFeedQueue };
+            return { isUserLogged: true, _id: response._id, email: response.email, queue: feedsQueue, update: updateFeedQueue ,userInfo:response._doc};
           }
 
           return { isUserLogged: false, queue: feedsQueue, update: updateFeedQueue };

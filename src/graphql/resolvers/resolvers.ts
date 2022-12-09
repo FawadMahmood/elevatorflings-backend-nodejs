@@ -13,6 +13,7 @@ import { SeederController } from '../../controllers/seeder.controller';
 import { LocalizationController } from '../../controllers/localization.controller';
 import { EventController } from '../../controllers/event.controller';
 import { SocketController } from '../../controllers/socket.controller';
+import { ChatController } from '../../controllers/chat.controller';
 
 
 
@@ -28,6 +29,7 @@ const seederController = new SeederController();
 const localizationController = new LocalizationController();
 const eventController = new EventController();
 const socketController = new SocketController();
+const chatController = new ChatController();
 
 
 
@@ -76,6 +78,9 @@ const resolvers: IResolvers = {
     },
     getEvents: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return eventController.getEvents(args, ctx);
+    },
+    getChats:(_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      return chatController.getChats(args, ctx);
     }
   },
 
@@ -136,6 +141,9 @@ const resolvers: IResolvers = {
     },
     addEvent: async (_: any, args: any, ctx: Context) => {
       return eventController.addEvent(args, ctx);
+    },
+    sendMessage: async (_: any, args: any, ctx: Context) => {
+      return chatController.sendMessage(args, ctx);
     }
   },
 

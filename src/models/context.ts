@@ -1,4 +1,5 @@
 import Queue from 'bull';
+import { UserType } from '../utils/types';
 
 
 export interface Context {
@@ -11,4 +12,5 @@ export interface Context {
   update: {
     add: (props: { _id: string, key: string, value: any }) => void;
   };
+  userInfo?:UserType
 }
