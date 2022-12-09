@@ -92,6 +92,7 @@ type User {
   step: Int
   buildingId: String
   photos:[UserPhotos]
+  interests:[Interest]
 }
 
 type Query {

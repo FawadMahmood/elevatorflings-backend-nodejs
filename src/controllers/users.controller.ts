@@ -48,7 +48,7 @@ export class UsersController {
 
   @ValidateUserInput
   async getUser(inputObject: {userId:string}, ctx: Context) {
-    let userInfo = await Users.findById(inputObject.userId).populate('phone', '_id primary phone').populate('state').populate('country');
+    let userInfo = await Users.findById(inputObject.userId).populate('phone', '_id primary phone').populate('state').populate('country').populate('interests');
     let photos = await ImageMod.find({user:inputObject.userId});
     return { user: {...userInfo._doc,photos} } as any;
   }
