@@ -48,7 +48,7 @@ export class ChatController {
 
 
     @VerifyAuthorization
-    async sendMessage(args: { input:{userId: string;payload:{message:string,attachments:{type:"Image"|"Video",path:string;}[]}} }, ctx: Context) {
+    async sendMessage(args: { input:{userId: string;payload:{message:string,attachments:{type:"Image"|"Video",path:string;}[],reference_id:string}} }, ctx: Context) {
         const {password,...user}= ctx.userInfo as UserType;
 
         // check if user is blocked
@@ -76,8 +76,6 @@ export class ChatController {
                 sender:ctx._id
             });
 
-
-
             threada.save();
             threadb.save();
 
@@ -85,7 +83,7 @@ export class ChatController {
 
             socketController.emitMessageUpdate(threada,ctx);
             socketController.emitMessageUpdate(threadb,ctx);
-            return {...threada._doc,sender:user};
+            return {...threada._doc,sender:user,reference_id:payload.reference_id};
         }else{
             const conv = new Conversation({
                 participants:[ctx._id,userId],
@@ -132,7 +130,7 @@ export class ChatController {
             threada.save();
             threadb.save();
 
-            return {...threada._doc,sender:user};
+            return {...threada._doc,sender:user,reference_id:payload.reference_id};
         }
     }
 }

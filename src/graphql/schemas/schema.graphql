@@ -488,6 +488,8 @@ enum UserEventTypes {
   MESSAGE
   GROUP_MESSAGE
   KNOCK
+  TYPING
+  MESSAGE_SENT
 }
 
 type UserEvent{
@@ -527,6 +529,7 @@ type Thread{
   reactions:[Reaction]
   createdAt: Date
   updatedAt: Date
+  reference_id: String
 }
 
 type MessagesPayload{
@@ -546,6 +549,7 @@ input AttachmentInput{
 input MessageInputPayload{
   message: String
   attachments:[AttachmentInput]
+  reference_id: String
 }
 
 input SendMessagePayload{
