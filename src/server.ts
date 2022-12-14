@@ -19,6 +19,7 @@ import fs from 'fs'
 
 
 var rootCas = require('ssl-root-cas').create();
+
 require('https').globalAgent.options.ca = rootCas;
 
 
@@ -37,8 +38,8 @@ async function startApolloServer() {
 
 
   var options = ISLOCAL? {}: {
-    key: fs.readFileSync('/home/apiappsstaging/ssl/keys/c9b92_40289_6569433b8ad5475185d9c7e1be071b0f.key'),
-    cert: fs.readFileSync('/home/apiappsstaging/ssl/certs/api_appsstaging_com_c9b92_40289_1677369599_99c8985018e4d3db1e09fce5ddc99351.crt')
+    key: fs.readFileSync('/home/apiappsstaging/ssl/keys/bf5d9_e317d_eecd4bfd2eb6ef27bf57ca806726b906.key'),
+    cert: fs.readFileSync('/home/apiappsstaging/ssl/certs/api_appsstaging_com_bf5d9_e317d_1700962103_3d787592e01882d69706b2e820e6e989.crt')
   };
 
   const httpsServer = https.createServer(options, app);
