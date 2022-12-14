@@ -32,7 +32,7 @@ export class ChatController {
                 })
             }
 
-            const threads =await Thread.find({$and:queries}).limit(10).populate('sender','_id name photoUrl').populate('reactions.user','_id name photoUrl').sort({createdAt:-1});
+            const threads =await Thread.find({$and:queries}).limit(15).populate('sender','_id name photoUrl').populate('reactions.user','_id name photoUrl').sort({createdAt:-1});
 
             return{
                 chats:threads,
