@@ -95,7 +95,8 @@ export class ChatController {
                 unique_id:unique_id,
                 message:payload.message,
                 attachments:payload.attachments,
-                sender:ctx._id
+                sender:ctx._id,
+                reference_id:payload.reference_id
             });
 
             thread.save();

@@ -57,8 +57,10 @@ const ThreadScheema = new mongoose.Schema(
             {
                     type:reactionSchema,
             }
-        ]
- 
+        ],
+        reference_id:{
+            type: String,
+        }
     },
     {
         timestamps: true,
