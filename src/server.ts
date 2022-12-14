@@ -21,13 +21,17 @@ interface MyContext {
   token?: String;
 }
 
+const ISLOCAL = true;
+
 async function startApolloServer() {
   const mHelper = new MongoHelper();
   mHelper.initiateMongoConnection();
   const app = express();
   const httpServer = http.createServer(app);
 
-  var options = {
+
+
+  var options = ISLOCAL? {}: {
     key: fs.readFileSync('/home/apiappsstaging/ssl/keys/c9b92_40289_6569433b8ad5475185d9c7e1be071b0f.key'),
     cert: fs.readFileSync('/home/apiappsstaging/ssl/certs/api_appsstaging_com_c9b92_40289_1677369599_99c8985018e4d3db1e09fce5ddc99351.crt')
   };
@@ -35,7 +39,7 @@ async function startApolloServer() {
   const httpsServer = https.createServer(options, app);
 
   const wsServer = new Server({
-    server: httpsServer,
+    server:ISLOCAL ?httpServer: httpsServer,
     path: "/socket",
   });
 
@@ -45,7 +49,7 @@ async function startApolloServer() {
 
   const server = new ApolloServer<MyContext>({
     schema,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer:httpsServer }),
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer:ISLOCAL ?httpServer: httpsServer }),
       {
         async serverWillStart() {
           return {
@@ -81,7 +85,7 @@ async function startApolloServer() {
   );
 
 
-  httpsServer.listen({ port: process.env.PORT }, (): void =>
+  (ISLOCAL ? httpServer: httpsServer).listen({ port: process.env.PORT }, (): void =>
     console.log(`\n🚀 GraphQL is now running on http://localhost:${process.env.PORT}/graphql`)
   );
 }
