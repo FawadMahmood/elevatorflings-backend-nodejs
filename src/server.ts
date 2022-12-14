@@ -37,9 +37,14 @@ async function startApolloServer() {
 
 
 
+  // var options = ISLOCAL? {}: {
+  //   key: fs.readFileSync('/home/apiappsstaging/ssl/keys/bd57c_ed52b_735b9943affdb28060184457e75b9493.key'),
+  //   cert: fs.readFileSync('/home/apiappsstaging/ssl/certs/api_appsstaging_com_bd57c_ed52b_1678838399_bc1a6e35bb046687d7864e323ec43e43.crt')
+  // };
+
   var options = ISLOCAL? {}: {
-    key: fs.readFileSync('/home/apiappsstaging/ssl/keys/bd57c_ed52b_735b9943affdb28060184457e75b9493.key'),
-    cert: fs.readFileSync('/home/apiappsstaging/ssl/certs/api_appsstaging_com_bd57c_ed52b_1678838399_bc1a6e35bb046687d7864e323ec43e43.crt')
+    key: fs.readFileSync('/var/cpanel/ssl/cpanel/cpanel.pem'),
+    cert: fs.readFileSync('/var/cpanel/ssl/cpanel/cpanel.pem')
   };
 
   const httpsServer = https.createServer(options, app);
