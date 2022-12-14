@@ -34,6 +34,13 @@ const chatController = new ChatController();
 
 
 const resolvers: IResolvers = {
+
+  UserEventPayloadUnion:{
+    __resolveType(obj:any, contextValue:any, info:any){
+      return 'Thread';
+    }
+  },
+
   Query: {
     seedcountry: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return seederController.generateCountryData(args, ctx);
@@ -81,6 +88,9 @@ const resolvers: IResolvers = {
     },
     getChats:(_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return chatController.getChats(args, ctx);
+    },
+    getConversationId:async (_: any, args: any, ctx: Context) => {
+      return chatController.getConversationId(args, ctx);
     }
   },
 
@@ -144,7 +154,8 @@ const resolvers: IResolvers = {
     },
     sendMessage: async (_: any, args: any, ctx: Context) => {
       return chatController.sendMessage(args, ctx);
-    }
+    },
+   
   },
 
   Subscription:{

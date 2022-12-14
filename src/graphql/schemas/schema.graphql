@@ -467,6 +467,18 @@ type Query{
   getEvents(input:GetEventsVariables!):EventstPayloadGeneric
 }
 
+type Thread{
+  _id:ID
+  conversation:ID
+  sender:User
+  unique_id: String
+  message: String
+  attachments:[Attachment]
+  reactions:[Reaction]
+  createdAt: Date
+  updatedAt: Date
+  reference_id: String
+}
 
 
 
@@ -484,6 +496,9 @@ type UserEventPayload{
     attachments:[Attachment]
 }
 
+union UserEventPayloadUnion = Thread
+
+
 enum UserEventTypes {
   MESSAGE
   GROUP_MESSAGE
@@ -494,7 +509,7 @@ enum UserEventTypes {
 
 type UserEvent{
     type:UserEventTypes
-    payload:UserEventPayload
+    payload:UserEventPayloadUnion
 }
 
 
@@ -519,18 +534,6 @@ type Attachment{
     path: String
 }
 
-type Thread{
-  _id:ID
-  conversation:ID
-  sender:User
-  unique_id: String
-  message: String
-  attachments:[Attachment]
-  reactions:[Reaction]
-  createdAt: Date
-  updatedAt: Date
-  reference_id: String
-}
 
 type MessagesPayload{
   chats:[Thread]
@@ -539,6 +542,7 @@ type MessagesPayload{
 
 type Query{
   getChats(userId:String! cursor:String):MessagesPayload
+  getConversationId(userId:String!):ConversationIdPayload
 }
 
 input AttachmentInput{
@@ -557,6 +561,12 @@ input SendMessagePayload{
   payload:MessageInputPayload
 }
 
+
+type ConversationIdPayload{
+  conversation_id: String
+}
+
 type Mutation{
   sendMessage(input:SendMessagePayload):Thread
+
 }

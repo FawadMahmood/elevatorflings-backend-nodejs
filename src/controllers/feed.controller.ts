@@ -77,6 +77,8 @@ export class FeedController {
         const feeds = await Feed.find(applied_filters).limit(first || 5).populate('interests', '_id title addedBy').populate('ref_user').populate('state').populate('country').sort({_id:1});
 
 
+        console.log("feeds found", feeds);
+        
         return {
             feeds: feeds
         } as any;
