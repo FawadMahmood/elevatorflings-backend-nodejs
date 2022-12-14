@@ -17,11 +17,16 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import https from 'https'
 import fs from 'fs'
 
+
+var rootCas = require('ssl-root-cas').create();
+require('https').globalAgent.options.ca = rootCas;
+
+
 interface MyContext {
   token?: String;
 }
 
-const ISLOCAL = true;
+const ISLOCAL = false;
 
 async function startApolloServer() {
   const mHelper = new MongoHelper();
