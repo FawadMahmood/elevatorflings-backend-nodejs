@@ -28,8 +28,8 @@ async function startApolloServer() {
   const httpServer = http.createServer(app);
 
   var options = {
-    key: fs.readFileSync('./keys/c9b92_40289_6569433b8ad5475185d9c7e1be071b0f.key'),
-    cert: fs.readFileSync('./keys/api_appsstaging_com_c9b92_40289_1677369599_99c8985018e4d3db1e09fce5ddc99351.crt')
+    key: fs.readFileSync('/home/apiappsstaging/ssl/keys/c9b92_40289_6569433b8ad5475185d9c7e1be071b0f.key'),
+    cert: fs.readFileSync('/home/apiappsstaging/ssl/certs/api_appsstaging_com_c9b92_40289_1677369599_99c8985018e4d3db1e09fce5ddc99351.crt')
   };
 
   const httpsServer = https.createServer(options, app);
