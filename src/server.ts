@@ -27,15 +27,15 @@ async function startApolloServer() {
   const app = express();
   const httpServer = http.createServer(app);
 
-  // var options = {
-  //   key: fs.readFileSync('/home/apiappsstaging/ssl/keys/c9b92_40289_6569433b8ad5475185d9c7e1be071b0f-key.pem'),
-  //   cert: fs.readFileSync('/home/apiappsstaging/ssl/keys/c9b92_40289_6569433b8ad5475185d9c7e1be071b0f-cert.cert')
-  // };
+  var options = {
+    key: fs.readFileSync('./keys/c9b92_40289_6569433b8ad5475185d9c7e1be071b0f.key'),
+    cert: fs.readFileSync('./keys/api_appsstaging_com_c9b92_40289_1677369599_99c8985018e4d3db1e09fce5ddc99351.crt')
+  };
 
-  // const httpsServer = https.createServer(options, app).listen(3099);
+  const httpsServer = https.createServer(options, app);
 
   const wsServer = new Server({
-    server: httpServer,
+    server: httpsServer,
     path: "/socket",
   });
 
@@ -45,7 +45,7 @@ async function startApolloServer() {
 
   const server = new ApolloServer<MyContext>({
     schema,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer }),
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer:httpsServer }),
       {
         async serverWillStart() {
           return {
@@ -81,7 +81,7 @@ async function startApolloServer() {
   );
 
 
-  httpServer.listen({ port: process.env.PORT }, (): void =>
+  httpsServer.listen({ port: process.env.PORT }, (): void =>
     console.log(`\n🚀 GraphQL is now running on http://localhost:${process.env.PORT}/graphql`)
   );
 }
