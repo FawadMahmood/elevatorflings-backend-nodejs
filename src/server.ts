@@ -14,7 +14,8 @@ import compression from 'compression';
 import depthLimit from 'graphql-depth-limit';
 import { Server } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
-
+import https from 'https'
+import fs from 'fs'
 
 interface MyContext {
   token?: String;
@@ -25,6 +26,13 @@ async function startApolloServer() {
   mHelper.initiateMongoConnection();
   const app = express();
   const httpServer = http.createServer(app);
+
+  // var options = {
+  //   key: fs.readFileSync('/home/apiappsstaging/ssl/keys/c9b92_40289_6569433b8ad5475185d9c7e1be071b0f-key.pem'),
+  //   cert: fs.readFileSync('/home/apiappsstaging/ssl/keys/c9b92_40289_6569433b8ad5475185d9c7e1be071b0f-cert.cert')
+  // };
+
+  // const httpsServer = https.createServer(options, app).listen(3099);
 
   const wsServer = new Server({
     server: httpServer,
