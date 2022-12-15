@@ -16,6 +16,8 @@ const socketController = new SocketController();
 export class ChatController {
 
     async getConversationId(args: { userId: string; }, ctx: Context) {
+        console.log("came to get conversation id", args.userId);
+        
         const {userId} = args;
         const chat = await Chat.findOne({$and:[{user:ctx._id},{ref_user:userId}]});
         if(chat){
@@ -25,7 +27,7 @@ export class ChatController {
         }else{
             const conv = new Conversation({
                 participants:[ctx._id,userId],
-                last_message:"" // set from payload
+                last_message:"" 
             });
             const a = new Chat({
                 user:ctx._id,
@@ -51,8 +53,6 @@ export class ChatController {
     @VerifyAuthorization
     async getChats(args: { userId: string;cursor:string; }, ctx: Context) {
         const {userId} = args;
-        // const chat = await Chat.findOne({$and:[{user:ctx._id},{ref_user:userId}]});
-        // if(chat){
             let queries:any = [
                 {conversation:userId},
                 {user:ctx._id},
@@ -70,13 +70,6 @@ export class ChatController {
                 chats:threads,
                 conversation_id:userId,
             } as any;
-        // }
-        // else{
-        //     return{
-        //         chats:[],
-        //         conversation_id:"",
-        //     } as any;
-        // }
     }
 
 
@@ -87,6 +80,29 @@ export class ChatController {
         const conversation = await Conversation.findById(userId);
         const unique_id = uuid.v4() +conversation._id;
         let thread:any;
+
+
+        Chat.updateMany({
+            conversation:conversation._id
+        },{
+            $set:{
+                active:true,
+            }
+        }).then(res=>{
+            console.log("all chats got active");
+            
+        });
+
+        Conversation.updateOne({
+            _id:conversation._id,
+        },{
+            $set:{
+                last_message:payload.message
+            }
+        }).then(()=>{
+            console.log("last message updated");
+            
+        })
         
         conversation.participants.forEach(async(element:string) => {
              thread = new Thread({
@@ -103,90 +119,8 @@ export class ChatController {
             socketController.emitMessageUpdate(thread,ctx);
         });
 
+        
+
         return {...thread._doc,sender:user,reference_id:payload.reference_id};
-        
-
-
-        // check if user is blocked
-        // const {userId,payload} = args.input;
-        // const chat = await Chat.findOne({$and:[{user:ctx._id},{ref_user:userId}]});
-        
-        // if(chat){
-        //     const unique_id = uuid.v4() + chat.conversation;
-
-            // const threada = new Thread({
-            //     conversation:chat.conversation,
-            //     user:ctx._id,
-            //     unique_id:unique_id,
-            //     message:payload.message,
-            //     attachments:payload.attachments,
-            //     sender:ctx._id
-            // });
-
-        //     const threadb = new Thread({
-        //         conversation:chat.conversation,
-        //         user:userId,
-        //         unique_id:unique_id,
-        //         message:payload.message,
-        //         attachments:payload.attachments,
-        //         sender:ctx._id
-        //     });
-
-        //     threada.save();
-        //     threadb.save();
-
-        //     threadb.populate('user');
-
-        //     socketController.emitMessageUpdate(threada,ctx);
-        //     socketController.emitMessageUpdate(threadb,ctx);
-        //     return {...threada._doc,sender:user,reference_id:payload.reference_id};
-        // }else{
-        //     const conv = new Conversation({
-        //         participants:[ctx._id,userId],
-        //         last_message:"" // set from payload
-        //     });
-        //     const a = new Chat({
-        //         user:ctx._id,
-        //         ref_user:userId,
-        //         conversation:conv._id,
-        //     });
-        //     const b = new Chat({
-        //         ref_user:ctx._id,
-        //         user:userId,
-        //         conversation:conv._id,
-        //     });
-
-        //     const unique_id = uuid.v4() + conv._id;
-
-        //     const threada = new Thread({
-        //         conversation:conv._id,
-        //         user:ctx._id,
-        //         unique_id:unique_id,
-        //         message:payload.message,
-        //         attachments:payload.attachments,
-        //         sender:ctx._id
-        //     });
-
-        //     const threadb = new Thread({
-        //         conversation:conv._id,
-        //         user:userId,
-        //         unique_id:unique_id,
-        //         message:payload.message,
-        //         attachments:payload.attachments,
-        //         sender:ctx._id
-        //     });
-
-        //     socketController.emitMessageUpdate(threada,ctx);
-        //     socketController.emitMessageUpdate(threadb,ctx);
-
-
-        //     conv.save();
-        //     a.save();
-        //     b.save();
-        //     threada.save();
-        //     threadb.save();
-
-        //     return {...threada._doc,sender:user,reference_id:payload.reference_id};
-        // }
     }
 }

@@ -67,4 +67,6 @@ const FeedSchema = new mongoose.Schema(
     }
 );
 
+
+FeedSchema.index({location:'2dsphere'});
 module.exports = mongoose.model('Feed', FeedSchema);

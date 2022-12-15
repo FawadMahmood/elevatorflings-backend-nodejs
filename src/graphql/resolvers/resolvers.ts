@@ -14,6 +14,7 @@ import { LocalizationController } from '../../controllers/localization.controlle
 import { EventController } from '../../controllers/event.controller';
 import { SocketController } from '../../controllers/socket.controller';
 import { ChatController } from '../../controllers/chat.controller';
+import { ConversationController } from '../../controllers/conversation.controller';
 
 
 
@@ -30,6 +31,8 @@ const localizationController = new LocalizationController();
 const eventController = new EventController();
 const socketController = new SocketController();
 const chatController = new ChatController();
+const conversationController = new ConversationController();
+
 
 
 
@@ -91,6 +94,9 @@ const resolvers: IResolvers = {
     },
     getConversationId:async (_: any, args: any, ctx: Context) => {
       return chatController.getConversationId(args, ctx);
+    },
+    getConversations:async (_: any, args: any, ctx: Context) => {
+        return conversationController.getConversations(args, ctx);
     }
   },
 

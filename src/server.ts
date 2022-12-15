@@ -17,10 +17,13 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import https from 'https'
 import fs from 'fs'
 
+// @ts-ignore
+import cron from 'node-cron'
 
 var rootCas = require('ssl-root-cas').create();
 
 require('https').globalAgent.options.ca = rootCas;
+
 
 
 interface MyContext {
@@ -41,11 +44,6 @@ async function startApolloServer() {
     key: fs.readFileSync('/home/apiappsstaging/ssl/keys/bd57c_ed52b_735b9943affdb28060184457e75b9493.key'),
     cert: fs.readFileSync('/home/apiappsstaging/ssl/certs/api_appsstaging_com_bd57c_ed52b_1678838399_bc1a6e35bb046687d7864e323ec43e43.crt')
   };
-
-  // var options = ISLOCAL? {}: {
-  //   key: fs.readFileSync('/var/cpanel/ssl/cpanel/cpanel.pem'),
-  //   cert: fs.readFileSync('/var/cpanel/ssl/cpanel/cpanel.pem')
-  // };
 
   const httpsServer = https.createServer(options, app);
 
@@ -100,6 +98,10 @@ async function startApolloServer() {
     console.log(`\n🚀 GraphQL is now running on http://localhost:${process.env.PORT}/graphql`)
   );
 }
+
+cron.schedule('* * * * *', () => {
+  console.log('running a task every minute');
+});
 
 
 startApolloServer();

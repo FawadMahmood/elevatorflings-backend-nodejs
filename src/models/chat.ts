@@ -22,6 +22,10 @@ const ChatScheema = new mongoose.Schema(
         },
         reason:{
             type:String
+        },
+        active:{
+            type:Boolean,
+            default:false
         }
     },
     {
@@ -30,5 +34,6 @@ const ChatScheema = new mongoose.Schema(
 );
 
 ChatScheema.index( { user: 1, ref_user: 1 });
+ChatScheema.index( { user: 1});
 
 module.exports = mongoose.model('Chat', ChatScheema);

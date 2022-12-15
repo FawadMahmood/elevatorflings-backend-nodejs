@@ -540,9 +540,29 @@ type MessagesPayload{
   conversation_id: ID
 }
 
+type Conversation{
+  _id:ID!
+  participants:[String]
+  last_message:String
+  updatedAt:String
+}
+
+type Chat{
+    ref_user:User
+    conversation:Conversation
+    canReply:Boolean
+    reason:String
+}
+
+type ConversationsPayload{
+   chats:[Chat]
+   error: Error
+}
+
 type Query{
   getChats(userId:String! cursor:String):MessagesPayload
   getConversationId(userId:String!):ConversationIdPayload
+  getConversations(cursor:String):ConversationsPayload
 }
 
 input AttachmentInput{
