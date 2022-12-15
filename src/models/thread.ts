@@ -60,7 +60,13 @@ const ThreadScheema = new mongoose.Schema(
         ],
         reference_id:{
             type: String,
-        }
+        },
+        deliveredAt:{
+            type:Date
+        },
+        seenAt:{
+            type:Date
+        },
     },
     {
         timestamps: true,
