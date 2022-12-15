@@ -27,7 +27,7 @@ interface MyContext {
   token?: String;
 }
 
-const ISLOCAL = false;
+const ISLOCAL = true;
 
 async function startApolloServer() {
   const mHelper = new MongoHelper();
