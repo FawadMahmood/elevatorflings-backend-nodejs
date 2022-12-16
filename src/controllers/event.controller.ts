@@ -63,6 +63,8 @@ export class EventController {
 
         if(input.location){
             if(input.sortBy && input.sortBy.includes('location')){
+                console.log("sorting by location");
+                
                 conditions.push(
                     {
                         location: {
@@ -73,7 +75,7 @@ export class EventController {
                                     coordinates:[input.location?.longitude,input.location?.latitude]
                                 },
                                 $minDistance: 0,
-                                $maxDistance:100000
+                                $maxDistance:900000000
                             }
                         }
                     },
