@@ -99,8 +99,21 @@ async function startApolloServer() {
   );
 }
 
-cron.schedule('* * * * *', () => {
+
+import mongoose = require('mongoose');
+import { EventType } from './utils/types';
+const Event: mongoose.Model<EventType> = require('./models/event');
+
+
+cron.schedule('* * * * *',async () => {
   console.log('running a task every minute');
+  Event.updateMany({$and:[{end_date:{$lt:new Date()}},{status:"AVAILABLE"}]},{
+    $set:{
+      available:false,
+      status:"COMPLETED"
+    }
+  }).then(pastevents=>{
+  });
 });
 
 
