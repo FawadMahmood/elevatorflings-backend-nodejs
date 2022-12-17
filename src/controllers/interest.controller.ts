@@ -37,8 +37,7 @@ export class InterestsController {
             error: null,
             success: true,
         } as any
-        // console.log('came to add interst', args);
-
+      
     }
 
 
@@ -59,7 +58,6 @@ export class InterestsController {
                     step: 4
                 }
             }).then(response => {
-                console.log("completed updated.");
             });
         }
 

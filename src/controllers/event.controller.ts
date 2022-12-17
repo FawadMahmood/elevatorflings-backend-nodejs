@@ -63,7 +63,6 @@ export class EventController {
 
         if(input.location){
             if(input.sortBy && input.sortBy.includes('location')){
-                console.log("sorting by location");
                 
                 conditions.push(
                     {

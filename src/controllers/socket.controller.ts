@@ -21,7 +21,6 @@ export class SocketController {
 
     async emitMatchUpdate(match_id:any, ctx: Context) {    
         const match = await Match.findById(match_id).populate('participants',"_id name photoUrl");
-        console.log("on seems like it's a match can hit sockets",match); 
         match.participants.forEach((element:UserType) => {
           pubsub.publish(
             `${'USER_EVENT'}.${element._id}`, 
@@ -35,18 +34,8 @@ export class SocketController {
     }
 
     async emitMessageUpdate(thread:any, ctx: Context) {
-        console.log("want to emit message update", thread.user);
-        // const _thread = await Thread.findById(thread._id).populate('sender','_id name photoUrl').populate('reactions.user','_id name photoUrl');
         const user = await User.findById(thread.sender);
       
-      //   console.log("thread got",{
-      //     type:"MESSAGE",
-      //     payload:{...thread,sender:user},
-      // });
-
-      console.log("emmiting to user", thread.user);
-      
-        
         pubsub.publish(
           `${'USER_EVENT'}.${thread.user}`, 
           { userEvent:

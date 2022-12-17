@@ -58,7 +58,6 @@ export class SeederController {
 
                 await _cc.save();
 
-                // console.log("country got",con);
 
                 const fetch_state = await axios.get(`https://www.universal-tutorial.com/api/states/${con.country_name}`, {
                     headers: {

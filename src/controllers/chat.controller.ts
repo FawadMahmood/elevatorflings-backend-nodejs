@@ -16,8 +16,6 @@ const socketController = new SocketController();
 export class ChatController {
 
     async getConversationId(args: { userId: string; }, ctx: Context) {
-        console.log("came to get conversation id", args.userId);
-        
         const {userId} = args;
         const chat = await Chat.findOne({$and:[{user:ctx._id},{ref_user:userId}]});
         if(chat){
@@ -88,8 +86,6 @@ export class ChatController {
                 active:true,
             }
         }).then(res=>{
-            console.log("all chats got active");
-            
         });
 
         Conversation.updateOne({
@@ -99,7 +95,6 @@ export class ChatController {
                 last_message:payload.message
             }
         }).then(()=>{
-            console.log("last message updated");
             
         })
         
@@ -117,12 +112,8 @@ export class ChatController {
             await thread.save();
             socketController.emitMessageUpdate(thread,ctx);
         });
-        console.log("thread id" );
-        const _thread = await Thread.findOne({$and:[{conversation:conversation._id},{user:ctx._id},{unique_id:unique_id}]});
-
-        console.log("thread id",_thread );
-        
-        
+        // const _thread = await Thread.findOne({$and:[{conversation:conversation._id},{user:ctx._id},{unique_id:unique_id}]});
+  
 
         return {_id:"NotAvailable",sender:user,reference_id:payload.reference_id,conversation:conversation._id} as any;
     }
