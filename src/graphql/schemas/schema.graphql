@@ -545,7 +545,7 @@ type Conversation{
   _id:ID!
   participants:[String]
   last_message:String
-  updatedAt:String
+  updatedAt:Date
 }
 
 type Chat{

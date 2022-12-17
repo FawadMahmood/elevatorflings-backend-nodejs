@@ -17,6 +17,10 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import https from 'https'
 import fs from 'fs'
 
+import mongoose from 'mongoose'
+// @ts-ignore
+// import mongooseRedisCaching from 'mongoose-redis-caching'
+// mongooseRedisCaching(mongoose);
 // @ts-ignore
 import cron from 'node-cron'
 
@@ -100,7 +104,6 @@ async function startApolloServer() {
 }
 
 
-import mongoose = require('mongoose');
 import { EventType } from './utils/types';
 const Event: mongoose.Model<EventType> = require('./models/event');
 
