@@ -39,10 +39,13 @@ export class SocketController {
         // const _thread = await Thread.findById(thread._id).populate('sender','_id name photoUrl').populate('reactions.user','_id name photoUrl');
         const user = await User.findById(thread.sender);
       
-        console.log("thread got",{
-          type:"MESSAGE",
-          payload:{...thread,sender:user},
-      });
+      //   console.log("thread got",{
+      //     type:"MESSAGE",
+      //     payload:{...thread,sender:user},
+      // });
+
+      console.log("emmiting to user", thread.user);
+      
         
         pubsub.publish(
           `${'USER_EVENT'}.${thread.user}`, 

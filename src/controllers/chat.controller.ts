@@ -79,8 +79,7 @@ export class ChatController {
         const {userId,payload} = args.input;
         const conversation = await Conversation.findById(userId);
         const unique_id = uuid.v4() +conversation._id;
-        let thread:any;
-
+        
 
         Chat.updateMany({
             conversation:conversation._id
@@ -104,8 +103,8 @@ export class ChatController {
             
         })
         
-        conversation.participants.forEach(async(element:string) => {
-             thread = new Thread({
+       await conversation.participants.forEach(async(element:string) => {
+            const thread = new Thread({
                 conversation:conversation._id,
                 user:element,
                 unique_id:unique_id,
@@ -118,9 +117,13 @@ export class ChatController {
             await thread.save();
             socketController.emitMessageUpdate(thread,ctx);
         });
+        console.log("thread id" );
+        const _thread = await Thread.findOne({$and:[{conversation:conversation._id},{user:ctx._id},{unique_id:unique_id}]});
 
+        console.log("thread id",_thread );
+        
         
 
-        return {...thread._doc,sender:user,reference_id:payload.reference_id};
+        return {_id:"NotAvailable",sender:user,reference_id:payload.reference_id,conversation:conversation._id} as any;
     }
 }
