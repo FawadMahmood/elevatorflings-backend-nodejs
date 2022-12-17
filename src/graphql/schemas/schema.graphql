@@ -469,8 +469,8 @@ type Query{
 }
 
 type Thread{
-  _id:ID
-  conversation:ID
+  _id:ID!
+  conversation:ID!
   sender:User
   unique_id: String
   message: String
@@ -497,7 +497,13 @@ type UserEventPayload{
     attachments:[Attachment]
 }
 
-union UserEventPayloadUnion = Thread
+type Match{
+  _id:ID!
+  participants:[User]
+}
+
+
+union UserEventPayloadUnion = Thread | Match
 
 
 enum UserEventTypes {
@@ -587,7 +593,10 @@ type ConversationIdPayload{
   conversation_id: String
 }
 
+
+
+
 type Mutation{
   sendMessage(input:SendMessagePayload):Thread
-
+  addKnock(id:String! isKnock:Boolean!):GenericPayload
 }

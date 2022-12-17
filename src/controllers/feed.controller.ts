@@ -67,7 +67,7 @@ export class FeedController {
             });
         }
 
-        if (!filters && !interests) {
+        // if (!filters && !interests) {
             conditions.push({
                 ignored: false
             });
@@ -75,7 +75,7 @@ export class FeedController {
             conditions.push({
                 match: false,
             });
-        }
+        // }
 
         let applied_filters = {
             $and: [

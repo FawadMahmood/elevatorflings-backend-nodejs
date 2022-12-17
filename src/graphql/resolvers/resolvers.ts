@@ -15,6 +15,7 @@ import { EventController } from '../../controllers/event.controller';
 import { SocketController } from '../../controllers/socket.controller';
 import { ChatController } from '../../controllers/chat.controller';
 import { ConversationController } from '../../controllers/conversation.controller';
+import { MatchController } from '../../controllers/match.controller';
 
 
 
@@ -32,6 +33,8 @@ const eventController = new EventController();
 const socketController = new SocketController();
 const chatController = new ChatController();
 const conversationController = new ConversationController();
+const matchController = new MatchController();
+
 
 
 
@@ -40,6 +43,12 @@ const resolvers: IResolvers = {
 
   UserEventPayloadUnion:{
     __resolveType(obj:any, contextValue:any, info:any){
+      console.log("resolver called", obj);
+
+      if(obj.participants){
+        return "Match"
+      }
+      
       return 'Thread';
     }
   },
@@ -97,7 +106,8 @@ const resolvers: IResolvers = {
     },
     getConversations:async (_: any, args: any, ctx: Context) => {
         return conversationController.getConversations(args, ctx);
-    }
+    },
+    
   },
 
   Mutation: {
@@ -161,7 +171,9 @@ const resolvers: IResolvers = {
     sendMessage: async (_: any, args: any, ctx: Context) => {
       return chatController.sendMessage(args, ctx);
     },
-   
+    addKnock: async (_: any, args: any, ctx: Context) => {
+      return matchController.addKnock(args, ctx);
+    }
   },
 
   Subscription:{

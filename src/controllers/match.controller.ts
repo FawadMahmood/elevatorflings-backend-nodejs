@@ -2,18 +2,43 @@ import mongoose = require('mongoose');
 import { Context } from '../models/context';
 import { VerifyAuthorization } from '../decorators/auth.decorator';
 import { UserType } from '../utils/types';
+import { SocketController } from './socket.controller';
 const Feed: mongoose.Model<any> = require('../models/feed');
-const User: mongoose.Model<UserType> = require('../models/users');
+const Match: mongoose.Model<any> = require('../models/match');
+const socketController = new SocketController();
 
 type FeedVariables = {
-    userId: string;
-    refId: string;
+    id: string;
+    isKnock:boolean;
 }
 
 export class MatchController {
     @VerifyAuthorization
-    async getFeed(args: FeedVariables, ctx: Context) {
-        const feed = await Feed.findOne({ $and: [{ user: args.userId }, { ref_user: args.refId }] }).populate('interests', '_id title addedBy').populate('ref_user').populate('state').populate('country');
-        return { feed } as any;
+    async addKnock(args: FeedVariables, ctx: Context) {
+        const {id,isKnock} = args;
+        const feed  = await Feed.findById(id);
+        const ref_feed  = await Feed.findOne({$and:[{user:feed.ref_user},{ref_user:feed.user}]});
+
+        await Feed.updateOne({
+            _id:feed._id,
+        },
+        {
+            $set:isKnock? {
+                match:true,
+            }:{
+                ignored:true,
+            }
+        });
+
+        if(isKnock === true && ref_feed.match){
+            const match = new Match({
+                participants:[feed.user,feed.ref_user]
+            });
+            await match.save();
+            socketController.emitMatchUpdate(match._id,ctx);
+        }
+       return {
+        success:true
+       } as any
     }
 }

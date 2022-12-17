@@ -115,7 +115,7 @@ export class ChatController {
                 reference_id:payload.reference_id
             });
 
-            thread.save();
+            await thread.save();
             socketController.emitMessageUpdate(thread,ctx);
         });
 
