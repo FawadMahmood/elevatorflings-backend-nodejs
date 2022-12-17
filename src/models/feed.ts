@@ -60,7 +60,7 @@ const FeedSchema = new mongoose.Schema(
         },
         buildingId:{
             type: String
-          }
+        }
     },
     {
         timestamps: true,
@@ -69,4 +69,8 @@ const FeedSchema = new mongoose.Schema(
 
 
 FeedSchema.index({location:'2dsphere'});
+FeedSchema.index({buildingId:1});
+FeedSchema.index({interests:1});
+FeedSchema.index({ignored:1,match:1});
+
 module.exports = mongoose.model('Feed', FeedSchema);

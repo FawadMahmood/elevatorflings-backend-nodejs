@@ -13,7 +13,7 @@ type FeedVariables = {
 export class FeedController {
     @VerifyAuthorization
     async getFeeds(args: any, ctx: Context) {
-        const { first, cursor, distance, filters, interests } = args;
+        const { first, cursor, distance, filters, interests,buildingId } = args;
         console.log("came to get feeds", args);
 
         const user = await User.findById(ctx._id);
@@ -41,6 +41,8 @@ export class FeedController {
         console.log("interests", interests);
 
         if (filters) {
+            console.log("got filters",filters );
+            
             filters.map((_filter: { key: string, value: string }) => {
                 conditions.push(
                     {
@@ -52,9 +54,17 @@ export class FeedController {
 
 
         if (interests) {
-            conditions.push(
-                { "interests": { $in: interests } }
-            )
+            if(interests.length > 0){
+                conditions.push(
+                    { "interests": { $in: interests } }
+                )
+            }
+        }
+
+        if(buildingId){
+            conditions.push({
+                buildingId: buildingId,
+            });
         }
 
         if (!filters && !interests) {
