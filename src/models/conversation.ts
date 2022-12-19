@@ -9,6 +9,7 @@ const ConversationScheema = new mongoose.Schema(
         last_message:{
             type:String,
         },
+        event:{type:mongoose.Schema.Types.ObjectId,ref:"Event"}
     },
     {
         timestamps: true,

@@ -8,7 +8,10 @@ const uuid = require('uuid');
 
 const Status: mongoose.Model<StatusType> = require('../models/status');
 const Chat: mongoose.Model<any> = require('../models/chat');
+
 const Conversation: mongoose.Model<any> = require('../models/conversation');
+const Event: mongoose.Model<any> = require('../models/event');
+
 const Thread: mongoose.Model<any> = require('../models/thread');
 
 const socketController = new SocketController();
@@ -23,27 +26,74 @@ export class ChatController {
                 conversation_id:chat.conversation,
             }
         }else{
-            const conv = new Conversation({
-                participants:[ctx._id,userId],
-                last_message:"" 
-            });
-            const a = new Chat({
-                user:ctx._id,
-                ref_user:userId,
-                conversation:conv._id,
-            });
-            const b = new Chat({
-                ref_user:ctx._id,
-                user:userId,
-                conversation:conv._id,
-            });
+            const event = await Event.findById(userId);
 
-            conv.save();
-            a.save();
-            b.save();
+            // if(event){
+            //     console.log("ohh seems like a event bro");
+            //     return false;
+            // }
+
+            let conversation = await Conversation.findOne(event?{event:event._id}:{$and:[{participants:{$in:[ctx._id,userId]}}]} );
+            
+            if(!conversation){
+                conversation = new Conversation(event? {
+                    participants:[ctx._id],
+                    last_message:"",
+                    event:event._id
+                }:{
+                    participants:[ctx._id,userId],
+                    last_message:"" 
+                });
+
+                await conversation.save();
+            }else{
+                if(!conversation.participants.includes(ctx._id)){
+                    await Conversation.updateOne({
+                        event:event._id
+                    },{
+                        $set:{
+                            participants:[...conversation.participants,ctx._id]
+                        }
+                    });
+
+                    if(event){
+
+                    }
+                }
+            }
+            
+
+            if(!event){
+                const a = new Chat({
+                    user:ctx._id,
+                    ref_user:userId,
+                    conversation:conversation._id,
+                    type:event?"Event":"User"
+                });
+    
+                const b = new Chat({
+                    ref_user:ctx._id,
+                    user:userId,
+                    conversation:conversation._id,
+                    type:event?"Event":"User"
+                });
+    
+                
+                a.save();
+                b.save();
+            }else{
+                const a = new Chat({
+                    user:ctx._id,
+                    ref_user:userId,
+                    conversation:conversation._id,
+                    type:event?"Event":"User"
+                });
+               await a.save();
+            }
+            
 
             return{
-                conversation_id:conv._id,
+                conversation_id:conversation._id,
             }
         }
     }

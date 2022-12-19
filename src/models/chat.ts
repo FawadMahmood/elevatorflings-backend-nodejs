@@ -10,7 +10,11 @@ const ChatScheema = new mongoose.Schema(
         },
         ref_user:{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            refPath: 'type'
+        },
+        type:{
+            type:String,
+            require:true
         },
         conversation:{
             type: mongoose.Schema.Types.ObjectId,

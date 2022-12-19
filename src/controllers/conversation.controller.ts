@@ -29,10 +29,16 @@ export class ConversationController {
                 })
             }
 
-            const chat =await Chat.find({$and:queries}).populate('conversation').populate('ref_user','_id name photoUrl').limit(5);
+            const chat =await Chat.find({$and:queries}).populate('conversation').populate('ref_user','_id name photoUrl').sort({updatedAt:-1});
 
             return{
                 chats:chat
             } as any;
+    }
+
+
+    @VerifyAuthorization
+    async getUnreadCount(args:{cursor:string}, ctx: Context) {
+        
     }
 }
