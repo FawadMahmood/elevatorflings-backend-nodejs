@@ -45,7 +45,7 @@ const resolvers: IResolvers = {
     __resolveType(obj:any, contextValue:any, info:any){
       console.log("resolver called", obj);
 
-      if(obj.participants){
+      if(obj.participants && !obj.seenBy){
         return "Match"
       }
       

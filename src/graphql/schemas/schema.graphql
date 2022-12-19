@@ -479,6 +479,7 @@ type Thread{
   createdAt: Date
   updatedAt: Date
   reference_id: String
+  participants:[String]!
 }
 
 

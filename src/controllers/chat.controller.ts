@@ -53,8 +53,11 @@ export class ChatController {
         const {userId} = args;
             let queries:any = [
                 {conversation:userId},
-                {user:ctx._id},
+                {participants:{$in:[ctx._id]}},
             ];
+
+            console.log("getting chats query", queries);
+            
 
             if(args.cursor){
                 queries.push({
@@ -63,6 +66,10 @@ export class ChatController {
             }
 
             const threads =await Thread.find({$and:queries}).limit(15).populate('sender','_id name photoUrl').populate('reactions.user','_id name photoUrl').sort({createdAt:-1});
+
+
+
+            console.log("recieved threads", threads);
 
             return{
                 chats:threads,
@@ -98,23 +105,44 @@ export class ChatController {
             
         })
         
-       await conversation.participants.forEach(async(element:string) => {
-            const thread = new Thread({
-                conversation:conversation._id,
-                user:element,
-                unique_id:unique_id,
-                message:payload.message,
-                attachments:payload.attachments,
-                sender:ctx._id,
-                reference_id:payload.reference_id
-            });
 
-            await thread.save();
-            socketController.emitMessageUpdate(thread,ctx);
+
+        const thread = new Thread({
+            conversation:conversation._id,
+            unique_id:unique_id,
+            message:payload.message,
+            attachments:payload.attachments,
+            sender:ctx._id,
+            reference_id:payload.reference_id,
+            participants:conversation.participants,
+            seenBy:[],
+            deliveredTo:[],
         });
+
+        await thread.save();
+        socketController.emitMessageUpdate(thread,ctx);
+
+        console.log("thread save here like",thread);
+        
+        // socketController.emitMessageUpdate(thread,ctx);
+     
+    //    await conversation.participants.forEach(async(element:string) => {
+            // const thread = new Thread({
+            //     conversation:conversation._id,
+            //     user:element,
+            //     unique_id:unique_id,
+            //     message:payload.message,
+            //     attachments:payload.attachments,
+            //     sender:ctx._id,
+            //     reference_id:payload.reference_id
+            // });
+
+    //         await thread.save();
+    //         socketController.emitMessageUpdate(thread,ctx);
+    //     });
         // const _thread = await Thread.findOne({$and:[{conversation:conversation._id},{user:ctx._id},{unique_id:unique_id}]});
   
 
-        return {_id:"NotAvailable",sender:user,reference_id:payload.reference_id,conversation:conversation._id} as any;
+        return {...thread._doc,sender:user,reference_id:payload.reference_id,conversation:conversation._id} as any;
     }
 }

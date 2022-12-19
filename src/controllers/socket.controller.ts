@@ -34,16 +34,23 @@ export class SocketController {
     }
 
     async emitMessageUpdate(thread:any, ctx: Context) {
-        const user = await User.findById(thread.sender);
-      
-        pubsub.publish(
-          `${'USER_EVENT'}.${thread.user}`, 
-          { userEvent:
-             {
-              type:"MESSAGE",
-              payload:{...thread._doc,sender:user},
-          }
+       const user = await User.findById(thread.sender._id);
+        thread.participants.forEach((element:any) => {
+          console.log("sending thread to pubsub",`${'USER_EVENT'}.${element}`,{
+            type:"MESSAGE",
+            payload:{...thread._doc,sender:user},
         });
+          
+          pubsub.publish(
+            `${'USER_EVENT'}.${element}`, 
+            { userEvent:
+               {
+                type:"MESSAGE",
+                payload:{...thread._doc,sender:user},
+            }
+          });
+        });
+       
 
     }
 }

@@ -28,6 +28,25 @@ const reactionSchema = new mongoose.Schema({
     }
 });
 
+
+const seenSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    photoUrl:{
+        type:String
+    },
+    name:{
+        type:String 
+    },
+    createdAt:{
+        type: Date,
+        default: () => Date.now(),
+    }
+});
+
 const ThreadScheema = new mongoose.Schema(
     {
         conversation:{
@@ -64,9 +83,17 @@ const ThreadScheema = new mongoose.Schema(
         deliveredAt:{
             type:Date
         },
-        seenAt:{
-            type:Date
-        },
+        participants:[{type:mongoose.Schema.Types.ObjectId,ref:"User"}],
+        seenBy:[
+            {
+                type:seenSchema
+            }
+        ],
+        deliveredTo:[
+            {
+                type:seenSchema
+            }
+        ]
     },
     {
         timestamps: true,
@@ -75,4 +102,8 @@ const ThreadScheema = new mongoose.Schema(
 
 ThreadScheema.index({conversation:1,user:1});
 ThreadScheema.index({unique_id:1,conversation:1});
+ThreadScheema.index({participants:1});
+ThreadScheema.index({unique_id:1,conversation:1,participants:1});
+ThreadScheema.index({unique_id:1});
+
 module.exports = mongoose.model('Thread', ThreadScheema);
