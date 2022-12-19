@@ -468,6 +468,21 @@ type Query{
   getEvents(input:GetEventsVariables!):EventstPayloadGeneric
 }
 
+
+type Seen{
+  user:ID!
+  photoUrl:String
+  name:String
+  createdAt:Date
+}
+
+type Delivered{
+  user:ID!
+  photoUrl:String
+  name:String
+  createdAt:Date
+}
+
 type Thread{
   _id:ID!
   conversation:ID!
@@ -480,6 +495,8 @@ type Thread{
   updatedAt: Date
   reference_id: String
   participants:[String]!
+  seenBy:[Seen]
+  deliveredTo:[Delivered]
 }
 
 
