@@ -107,6 +107,13 @@ export class ChatController {
         
 
 
+        const seenReaction={
+            user:ctx._id,
+            photoUrl:user.photoUrl,
+            name:user.name,
+            createdAt: new Date(),
+        }
+
         const thread = new Thread({
             conversation:conversation._id,
             unique_id:unique_id,
@@ -115,8 +122,8 @@ export class ChatController {
             sender:ctx._id,
             reference_id:payload.reference_id,
             participants:conversation.participants,
-            seenBy:[ctx._id],
-            deliveredTo:[ctx._id],
+            seenBy:[seenReaction],
+            deliveredTo:[seenReaction],
         });
 
         await thread.save();
