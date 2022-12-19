@@ -115,8 +115,8 @@ export class ChatController {
             sender:ctx._id,
             reference_id:payload.reference_id,
             participants:conversation.participants,
-            seenBy:[],
-            deliveredTo:[],
+            seenBy:[ctx._id],
+            deliveredTo:[ctx._id],
         });
 
         await thread.save();

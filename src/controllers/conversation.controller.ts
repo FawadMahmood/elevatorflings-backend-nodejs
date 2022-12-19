@@ -29,7 +29,7 @@ export class ConversationController {
                 })
             }
 
-            const chat =await Chat.find({$and:queries}).limit(15).populate('conversation').populate('ref_user','_id name photoUrl').limit(5);
+            const chat =await Chat.find({$and:queries}).populate('conversation').populate('ref_user','_id name photoUrl').limit(5);
 
             return{
                 chats:chat
