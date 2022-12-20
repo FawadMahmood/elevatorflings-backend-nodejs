@@ -20,7 +20,14 @@ export class ChatController {
 
     async getConversationId(args: { userId: string; }, ctx: Context) {
         const {userId} = args;
+
+        console.log("userId Received",userId);
+        
         const chat = await Chat.findOne({$and:[{user:ctx._id},{ref_user:userId}]});
+        if(chat){
+            console.log("oh it seems like chat",chat);
+            
+        }
         if(chat){
             return{
                 conversation_id:chat.conversation,
@@ -28,14 +35,17 @@ export class ChatController {
         }else{
             const event = await Event.findById(userId);
 
-            // if(event){
-            //     console.log("ohh seems like a event bro");
-            //     return false;
-            // }
-
-            let conversation = await Conversation.findOne(event?{event:event._id}:{$and:[{participants:{$in:[ctx._id,userId]}}]} );
+            if(event){
+                console.log("oh it seems like event");
+                
+            }
+            let query = event?{event:event._id}:{$and:[{participants:{$in:[userId]}},{participants:{$in:[ctx._id]}},{event:null}]};
             
+            let conversation = await Conversation.findOne(query);
+
             if(!conversation){
+                console.log("conversation is empty" );
+                
                 conversation = new Conversation(event? {
                     participants:[ctx._id],
                     last_message:"",
@@ -47,6 +57,8 @@ export class ChatController {
 
                 await conversation.save();
             }else{
+                console.log("we have conversation available", conversation);
+                
                 if(!conversation.participants.includes(ctx._id)){
                     await Conversation.updateOne({
                         event:event._id
@@ -106,7 +118,6 @@ export class ChatController {
                 {participants:{$in:[ctx._id]}},
             ];
 
-            console.log("getting chats query", queries);
             
 
             if(args.cursor){
@@ -119,8 +130,7 @@ export class ChatController {
 
 
 
-            console.log("recieved threads", threads);
-
+         
             return{
                 chats:threads,
                 conversation_id:userId,

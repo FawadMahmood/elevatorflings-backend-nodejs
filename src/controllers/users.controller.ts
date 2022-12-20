@@ -27,7 +27,7 @@ export class UsersController {
 
       const image = input.gender === "MALE" ? 'https://avatarairlines.com/wp-content/uploads/2020/05/Male-placeholder.jpeg':"https://www.csncare.co.uk/wp-content/uploads/2020/05/Team-Member-FeMale-Placeholder.jpg"
 
-      const userInfo = new Users({ ...input, email: input.email.toLocaleLowerCase(), country: state?.country_id,photoUrl:image, });
+      const userInfo = new Users({ ...input, email: input.email.toLowerCase(),username:input.username.toLowerCase(),country: state?.country_id,photoUrl:image, });
       const _phone = new Phone({ phone: phone, primary: true, user: userInfo._id });
       userInfo.phone = _phone._id;
       const promises = await Promise.all([await userInfo.save(), _phone.save()]).then(() => console.log("adding user success"));
@@ -48,9 +48,8 @@ export class UsersController {
 
   @ValidateUserInput
   async getUser(inputObject: {userId:string}, ctx: Context) {
-    let userInfo = await Users.findById(inputObject.userId).populate('phone', '_id primary phone').populate('state').populate('country').populate('interests');
-    let photos = await ImageMod.find({user:inputObject.userId});
-    return { user: {...userInfo._doc,photos} } as any;
+    const profileInfo =await Promise.all([await Users.findById(inputObject.userId).populate('phone', '_id primary phone').populate('state').populate('country').populate('interests'),await ImageMod.find({user:inputObject.userId})])
+    return { user: {...profileInfo[0]._doc,photos:profileInfo[1]} } as any;
   }
 
   async updateUser(inputObject: any, ctx: Context) {
