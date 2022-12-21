@@ -31,11 +31,20 @@ export class MatchController {
         });
 
         if(isKnock === true && ref_feed.match){
-            const match = new Match({
-                participants:[feed.user,feed.ref_user]
-            });
-            await match.save();
-            socketController.emitMatchUpdate(match._id,ctx);
+            const _ = await Match.findOne({$and:[{
+                participants:{$in:[feed.user]}
+            },{
+                participants:{$in:[feed.ref_user]}
+            }]});
+            
+            if(!_){
+                const match = new Match({
+                    participants:[feed.user,feed.ref_user]
+                });
+                await match.save();
+                socketController.emitMatchUpdate(match._id,ctx);
+            }
+          
         }
        return {
         success:true

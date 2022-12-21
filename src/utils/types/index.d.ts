@@ -135,4 +135,5 @@ export interface GetEventsVariables{
     filters?:Filter[]
     sortBy?:string[];
     skip?:number;
+    userId?:string;
 }

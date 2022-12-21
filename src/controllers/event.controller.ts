@@ -106,6 +106,12 @@ export class EventController {
             });
         }
 
+
+        if(input.userId){
+            conditions.push({
+                createdBy:input.userId
+            });
+        }
       
 
         let applied_filters = {
@@ -126,6 +132,8 @@ export class EventController {
         
         const events =await  query.exec().catch(err=>console.log("error occured", err)); 
 
+        console.log("user got event", events);
+        
         return {
             events: events
         } as any;

@@ -461,6 +461,7 @@ input GetEventsVariables{
     filters: [FilterEvent]
     sortBy:[String]
     skip: Int
+    userId:ID
 }
 
 type Query{
