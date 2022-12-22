@@ -402,13 +402,13 @@ type Mutation {
 }
 
 input InputCreateEvent {
-  name: String
-  description: String
-  state: String
-  country: String
+  name: String!
+  description: String!
+  state: String!
+  country: String!
   buildingId: String
   status: String
-  category: ID
+  category: ID!
   start_date: Date
   end_date: Date
   photoUrl: String
