@@ -35,7 +35,7 @@ const EventScheema = new mongoose.Schema(
             type: String,
             default:"AVAILABLE",
         },
-        interests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' }],
+        category: { type: mongoose.Schema.Types.ObjectId, ref: 'EventCategory' },
         start_date:{
             type: Date,
         },
@@ -71,6 +71,8 @@ const EventScheema = new mongoose.Schema(
 
 EventScheema.index({location:"2dsphere"})
 EventScheema.index({createdBy:1})
+EventScheema.index({category:1})
+
 
 
 module.exports = mongoose.model('Event', EventScheema);

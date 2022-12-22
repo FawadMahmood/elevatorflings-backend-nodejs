@@ -22,7 +22,7 @@ export class EventController {
 
     @VerifyAuthorization
     async getEventInfo(args: { id:string }, ctx: Context) {
-        const event = await Event.findOne({_id:args.id}).populate('interests').populate('state').populate('country').populate('createdBy');
+        const event = await Event.findOne({_id:args.id}).populate('category').populate('state').populate('country').populate('createdBy');
         
         if(event){
             return{
@@ -120,7 +120,7 @@ export class EventController {
             ]
         };
         
-        let query = Event.find(applied_filters).populate('interests').populate('participants','_id name photoUrl').populate('state').populate('country').populate('createdBy'); //.catch(error=> console.log("error occured", error));
+        let query = Event.find(applied_filters).populate('category').populate('participants','_id name photoUrl').populate('state').populate('country').populate('createdBy'); //.catch(error=> console.log("error occured", error));
         
         if(input.limit){
             query = query.limit(input.limit);

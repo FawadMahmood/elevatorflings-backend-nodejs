@@ -60,7 +60,7 @@ export interface EventTypeInput{
     country:string,
     buildingId:string,
     status:"COMPLETED" | "AVAILABLE" | "CLOSED" | "CANCELLED",
-    interests: string[],
+    category: string,
     start_date:Date,
     end_date:Date,
     createdBy:string,

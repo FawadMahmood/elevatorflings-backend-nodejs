@@ -16,6 +16,7 @@ import { SocketController } from '../../controllers/socket.controller';
 import { ChatController } from '../../controllers/chat.controller';
 import { ConversationController } from '../../controllers/conversation.controller';
 import { MatchController } from '../../controllers/match.controller';
+import { EventCategoryController } from '../../controllers/event-category.controller';
 
 
 
@@ -34,6 +35,8 @@ const socketController = new SocketController();
 const chatController = new ChatController();
 const conversationController = new ConversationController();
 const matchController = new MatchController();
+const categoriesController = new EventCategoryController();
+
 
 
 
@@ -70,6 +73,12 @@ const resolvers: IResolvers = {
 
       return interestsController.getInterests(args, ctx)
     },
+    categories: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      console.log("need to get inyeresys");
+
+      return categoriesController.getCategories(args, ctx)
+    },
+
     me: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       console.log("user info");
       return usersController.me(args, ctx);
@@ -161,6 +170,9 @@ const resolvers: IResolvers = {
     },
     addInterest: async (_: any, args: any, ctx: Context) => {
       return interestsController.addInterestAdmin(args, ctx);
+    },
+    addCategory: async (_: any, args: any, ctx: Context) => {
+      return categoriesController.addCategoryAdmin(args, ctx);
     },
     completeProfile: async (_: any, args: any, ctx: Context) => {
       return stepsController.completeProfile(args, ctx);

@@ -17,11 +17,7 @@ export class MatchController {
     async addKnock(args: FeedVariables, ctx: Context) {
         const {id,isKnock} = args;
         const feed  = await Feed.findById(id);
-        const ref_feed  = await Feed.findOne({$and:[{user:feed.ref_user},{ref_user:feed.user}]});
-
-
-        console.log("math", id,isKnock,ref_feed);
-        
+        const ref_feed  = await Feed.findOne({$and:[{user:feed.ref_user},{ref_user:feed.user}]}); 
 
         await Feed.updateOne({
             _id:feed._id,
@@ -41,9 +37,6 @@ export class MatchController {
                 participants:{$in:[feed.ref_user]}
             }]});
 
-            console.log("match",_,ref_feed.match);
-            
-            
             if(!_){ 
                 const match = new Match({
                     participants:[feed.user,feed.ref_user]
