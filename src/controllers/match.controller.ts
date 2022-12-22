@@ -40,14 +40,17 @@ export class MatchController {
             },{
                 participants:{$in:[feed.ref_user]}
             }]});
+
+            console.log("match",_,ref_feed.match);
             
-            // if(!_){ 
+            
+            if(!_){ 
                 const match = new Match({
                     participants:[feed.user,feed.ref_user]
                 });
                 await match.save();
                 socketController.emitMatchUpdate(match._id,ctx);
-            // }
+            }
           
         }
        return {
