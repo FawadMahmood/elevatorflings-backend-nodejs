@@ -19,6 +19,10 @@ export class MatchController {
         const feed  = await Feed.findById(id);
         const ref_feed  = await Feed.findOne({$and:[{user:feed.ref_user},{ref_user:feed.user}]});
 
+
+        console.log("math", id,isKnock,ref_feed);
+        
+
         await Feed.updateOne({
             _id:feed._id,
         },
@@ -37,13 +41,13 @@ export class MatchController {
                 participants:{$in:[feed.ref_user]}
             }]});
             
-            if(!_){
+            // if(!_){ 
                 const match = new Match({
                     participants:[feed.user,feed.ref_user]
                 });
                 await match.save();
                 socketController.emitMatchUpdate(match._id,ctx);
-            }
+            // }
           
         }
        return {
