@@ -421,7 +421,7 @@ type EventPayload{
     country: Country
     buildingId: String
     status: String
-    interests: [Interest]
+    interests: [Interest]!
     start_date: Date
     end_date: Date
     photoUrl: String
@@ -430,6 +430,7 @@ type EventPayload{
     createdBy:CreatedBy
     available: Boolean
     address: String
+    participants:[User]!
 }
 
 type EventPayloadGeneric{
