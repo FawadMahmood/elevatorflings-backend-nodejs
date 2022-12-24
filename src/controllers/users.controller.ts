@@ -7,6 +7,7 @@ import otpGenerator from 'otp-generator'
 import { VerifyAuthorization } from '../decorators/auth.decorator';
 import { ValidateUserInput } from '../decorators/validation.decorator';
 import { CountryType, StateType } from '../utils/types';
+import { resolveError } from '../helpers/errorHelpers';
 
 
 const Users: Model<any> = require('../models/users');
@@ -225,29 +226,14 @@ export class UsersController {
     }).populate('phone', 'phone primary').populate('state').populate('country');
 
     if (user) {
-      const authenticate = await user.authenticate(args.password);
-      if (authenticate) {
-        // @ts-ignore
-        return { user: { ...authenticate._doc, accessToken: user.generateToken() } };
-      } else {
-        return {
-          error: {
-            message: "Invalid Credentials.",
-            code: errors.INVALID_CREDENTIALS
-          },
-          user: null,
-        }
-      }
-    } else {
-      return {
-        error: {
-          message: "Oops! we are unable to assosiate any account with this Email/Username.",
-          code: errors.INVALID_CREDENTIALS
-        },
-        user: null,
-      }
+      return await user.authenticate(args.password).then((user:any)=>{
+          if(user) return { user: { ...user._doc, accessToken: user.generateToken() } };
+          else return resolveError("authenticateUser","INVALID",'user');
+      });
+    }else{
+      console.log(resolveError("authenticateUser","ERROR",'user'));
+      
+      return resolveError("authenticateUser","ERROR",'user');
     }
   }
-
-
 }
