@@ -408,7 +408,7 @@ input InputCreateEvent {
   country: String!
   buildingId: String
   status: String
-  category: ID!
+  category: [ID]!
   start_date: Date
   end_date: Date
   photoUrl: String
@@ -436,7 +436,7 @@ type EventPayload{
     country: Country
     buildingId: String
     status: String
-    category: Interest!
+    category: [Interest]!
     start_date: Date
     end_date: Date
     photoUrl: String

@@ -35,7 +35,7 @@ const EventScheema = new mongoose.Schema(
             type: String,
             default:"AVAILABLE",
         },
-        category: { type: mongoose.Schema.Types.ObjectId, ref: 'EventCategory' },
+        category: [{ type: mongoose.Schema.Types.ObjectId, ref: 'EventCategory' }],
         start_date:{
             type: Date,
         },

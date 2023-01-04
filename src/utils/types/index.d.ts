@@ -31,6 +31,8 @@ export interface UserType {
     state: string
     buildingId:string;
     password:string;
+    generateToken:()=>string;
+    save:()=>Promise<void>
 }
 
 export interface EventType{

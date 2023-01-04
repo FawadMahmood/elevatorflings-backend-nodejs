@@ -6,7 +6,7 @@ import { Context } from '../models/context';
 import otpGenerator from 'otp-generator'
 import { VerifyAuthorization } from '../decorators/auth.decorator';
 import { ValidateUserInput } from '../decorators/validation.decorator';
-import { CountryType, StateType } from '../utils/types';
+import { CountryType, StateType, UserType } from '../utils/types';
 import { resolveError } from '../helpers/errorHelpers';
 
 
@@ -87,7 +87,7 @@ export class UsersController {
       });
     }
 
-    if (!userInfo.completed && userInfo.step === 1) {
+    if (!userInfo?.completed && userInfo?.step === 1) {
       Users.findOneAndUpdate({ _id: ctx._id }, {
         $set: {
           step: 3,
@@ -231,8 +231,6 @@ export class UsersController {
           else return resolveError("authenticateUser","INVALID",'user');
       });
     }else{
-      console.log(resolveError("authenticateUser","ERROR",'user'));
-      
       return resolveError("authenticateUser","ERROR",'user');
     }
   }
