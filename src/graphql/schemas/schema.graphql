@@ -104,6 +104,7 @@ type Query {
 enum Gender {
   MALE
   FEMALE
+  TRANS
   NONE
 }
 
@@ -352,8 +353,9 @@ input ImagePayload {
 
 input InputStepContinue {
   step: Int
-  images: [ImagePayload]
-  status: String
+  images: [ImagePayload]!
+  status: [String]!
+  looking:[Gender]!
 }
 
 type Mutation {

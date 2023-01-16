@@ -86,10 +86,14 @@ type ImagePayload = {
     primary: boolean;
 }
 
+
+type Gender = "MALE" | "FEMALE" | "NONE" | "TRANS"
+
 interface CompleteStatusType {
     step: number;
     images: ImagePayload[];
-    status: string;
+    status: [string];
+    looking:[Gender]
 }
 
 interface CompleteProfile {

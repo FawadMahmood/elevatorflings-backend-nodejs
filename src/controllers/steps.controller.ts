@@ -13,7 +13,6 @@ export class StepsController {
     @VerifyAuthorization
     async completeStep(args: { input: CompleteStatusType }, ctx: Context) {
         const { input } = args;
-        console.log("came to process step", input);
 
         switch (input.step) {
             case 1:
@@ -30,6 +29,7 @@ export class StepsController {
                     $set: {
                         photoUrl: primateImage.imageUrl,
                         status: input.status,
+                        looking:input.looking,
                         step: 2,
                     }
                 }).then(response => {

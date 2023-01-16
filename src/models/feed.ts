@@ -46,10 +46,10 @@ const FeedSchema = new mongoose.Schema(
             type: Boolean,
             default: false
         },
-        status: {
+        status: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Status',
-        },
+        }],
         state: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'State',

@@ -97,10 +97,13 @@ const UserSchema = new mongoose.Schema(
     address: {
       type: String
     },
-    status: {
+    status: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Status',
-    },
+    }],
+    looking: [{
+      type: String,
+    }],
     state: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'State',
