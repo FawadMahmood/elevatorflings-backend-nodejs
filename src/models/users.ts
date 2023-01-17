@@ -114,6 +114,12 @@ const UserSchema = new mongoose.Schema(
     },
     buildingId:{
       type: String
+    },
+    tagline:{
+      type: String,
+    },
+    about:{
+      type: String,
     }
   },
   {
